@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
-import java.net.Socket;
+import org.remoteDesktop.ConnectionStatus;
+import org.remoteDesktop.Loader;
 
 public class RemoteDesktopSceneController {
 
@@ -21,12 +21,11 @@ public class RemoteDesktopSceneController {
         model = new RemoteDesktopModel(iw, status);
     }
 
-    public void setStage(Stage stage) {
-        model.setStage(stage);
+    public void establishConnection(String ip, int port, String password) {
+        model.establishConnection(ip, port, password);
     }
 
-    public void establishConnection(Socket socket, String password) {
-        model.establishConnection(socket, password);
-    }
-
+//    public void setClient(Client client) {
+//        model.setClient(client);
+//    }
 }

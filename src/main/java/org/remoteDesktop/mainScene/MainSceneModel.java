@@ -1,7 +1,9 @@
 package org.remoteDesktop.mainScene;
 
+import javafx.stage.Stage;
 import org.remoteDesktop.Utils;
 import org.remoteDesktop.client.Client;
+import org.remoteDesktop.remoteDesktopScene.RemoteDesktop;
 import org.remoteDesktop.server.Server;
 
 import java.io.IOException;
@@ -10,8 +12,6 @@ public class MainSceneModel {
 
     private final String serverPassword;
     private Server server;
-
-    private Client client;
 
     MainSceneModel() {
         serverPassword = Utils.generatePassword(4);
@@ -32,8 +32,11 @@ public class MainSceneModel {
 //    }
 
     public void connectToServer(String ip, int port, String password) {
-        client = new Client(ip, port, password);
-        //client.connect(ip, port, password);
+        try {
+            new RemoteDesktop(ip, port, password);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -24,7 +24,7 @@ public class ReceiveScreen extends Thread implements Closeable {
         while(!interrupted()) {
 
             try {
-                byte[] bytes = new byte[1280 * 720];
+                byte[] bytes = new byte[1024 * 1024];
                 int count = 0;
                 do {
                     count += dis.read(bytes, count, bytes.length - count);
@@ -34,7 +34,6 @@ public class ReceiveScreen extends Thread implements Closeable {
                 iw.setImage(img);
 
             } catch (IOException e) {
-
                 e.printStackTrace();
             }
 

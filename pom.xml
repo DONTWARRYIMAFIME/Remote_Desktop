@@ -26,11 +26,6 @@
             <version>3.2.4</version>
             <type>maven-plugin</type>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>15.0.1</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>

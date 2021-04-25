@@ -1,14 +1,9 @@
 package org.remoteDesktop.server;
 
-import org.remoteDesktop.Verification;
-
-import java.awt.*;
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URL;
 import java.util.LinkedList;
-import java.util.Objects;
 
 public class Server extends Thread implements Closeable {
 
@@ -71,5 +66,7 @@ public class Server extends Thread implements Closeable {
                 e.printStackTrace();
             }
         }
+
+        interrupt();
     }
 }

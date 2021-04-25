@@ -2,11 +2,12 @@ package org.remoteDesktop.mainScene;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.remoteDesktop.mainScene.MainSceneModel;
 
 public class MainSceneController {
 
-    private final MainSceneModel mainSceneModel = new MainSceneModel();
+    private final MainSceneModel model = new MainSceneModel();
 
     @FXML
     private TextField tfMyIP;
@@ -21,13 +22,17 @@ public class MainSceneController {
     private TextField tfOtherPassword;
 
     public void initialize() {
-        tfMyIP.setText(mainSceneModel.getServerIP());
-        tfMyPassword.setText(mainSceneModel.getServerPassword());
+        tfMyIP.setText(model.getServerIP());
+        tfMyPassword.setText(model.getServerPassword());
     }
+
+//    public void setStage(Stage stage) {
+//        model.setStage(stage);
+//    }
 
     public void connectToServer() {
         //model.becomeClient();
-        mainSceneModel.connectToServer(tfOtherIP.getText(), 8001, tfOtherPassword.getText());
+        model.connectToServer(tfOtherIP.getText(), 8001, tfOtherPassword.getText());
     }
 
 

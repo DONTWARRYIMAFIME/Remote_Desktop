@@ -1,37 +1,27 @@
 package org.remoteDesktop.remoteDesktopScene;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
+import org.remoteDesktop.App;
 import org.remoteDesktop.Loader;
 
 import java.io.IOException;
-import java.net.Socket;
 
 public class RemoteDesktop {
 
-    public RemoteDesktop(Socket socket, String password) throws IOException {
-        Stage stage = new Stage();
+    public RemoteDesktop(String ip, int port, String password) throws IOException {
 
-        String title = "Free Remote Control | version 1.0";
-
-        FXMLLoader loader = Loader.loadFXML("remoteDesktopScene");
-
-        Scene scene = new Scene(loader.load());
+        FXMLLoader loader = App.getFXMLLoader("remoteDesktopScene");
         RemoteDesktopSceneController controller = loader.getController();
 
-        stage.setTitle(title);
-        stage.getIcons().add(Loader.loadImage("icon.png"));
-        stage.setScene(scene);
+        App.setRoot("remoteDesktopScene");
 
-        stage.setMinWidth(stage.getWidth());
-        stage.setMinHeight(stage.getHeight());
+        //controller.setStage(stage);
+        controller.establishConnection(ip, port, password);
 
-        stage.setScene(scene);
-        stage.show();
 
-        controller.setStage(stage);
-        controller.establishConnection(socket, password);
+
     }
 
 }
