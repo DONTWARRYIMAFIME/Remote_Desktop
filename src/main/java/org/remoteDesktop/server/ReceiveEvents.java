@@ -3,12 +3,12 @@ package org.remoteDesktop.server;
 import org.remoteDesktop.KeyEvents;
 
 import java.awt.*;
+import java.io.Closeable;
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class ReceiveEvents extends Thread {
+public class ReceiveEvents extends Thread implements Closeable {
 
     private final DataInputStream dis;
     private final Robot robot;
@@ -41,14 +41,15 @@ public class ReceiveEvents extends Thread {
             }
 
         } catch (NoSuchElementException e) {
-            System.out.println("Input stream is closed");
-            try {
-                dis.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            System.out.println("The client dropped the connection");
+            close();
         }
 
     }
 
+    @Override
+    public void close() {
+        System.out.println("Server: receive event interrupted");
+        interrupt();
+    }
 }

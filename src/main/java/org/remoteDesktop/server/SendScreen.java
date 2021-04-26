@@ -3,17 +3,15 @@ package org.remoteDesktop.server;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 
-public class SendScreen extends Thread {
+public class SendScreen extends Thread implements Closeable {
 
-    private DataOutputStream dos;
+    private final DataOutputStream dos;
     private final Robot robot;
     private final Rectangle rectangle;
-
-    private Socket sc;
 
     public SendScreen(DataOutputStream dos, Robot robot, Rectangle rectangle) {
         this.dos = dos;
@@ -36,15 +34,15 @@ public class SendScreen extends Thread {
             }
 
         } catch (IOException | InterruptedException e) {
-            System.out.println("Output stream is closed");
-            System.out.println("Client disconnected");
-            try {
-                dos.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            System.out.println("The client dropped the connection");
+            close();
         }
 
     }
 
+    @Override
+    public void close() {
+        System.out.println("Server: send screen event interrupted");
+        interrupt();
+    }
 }

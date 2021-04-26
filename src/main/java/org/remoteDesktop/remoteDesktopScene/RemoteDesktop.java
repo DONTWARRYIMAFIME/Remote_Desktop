@@ -1,10 +1,8 @@
 package org.remoteDesktop.remoteDesktopScene;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
-import org.remoteDesktop.App;
-import org.remoteDesktop.Loader;
+import org.remoteDesktop.EffectType;
+import org.remoteDesktop.SceneController;
 
 import java.io.IOException;
 
@@ -12,15 +10,12 @@ public class RemoteDesktop {
 
     public RemoteDesktop(String ip, int port, String password) throws IOException {
 
-        FXMLLoader loader = App.getFXMLLoader("remoteDesktopScene");
+        FXMLLoader loader = SceneController.getFXMLLoader("remoteDesktopScene");
         RemoteDesktopSceneController controller = loader.getController();
 
-        App.setRoot("remoteDesktopScene");
+        SceneController.setRoot("remoteDesktopScene", EffectType.EASE_IN);
 
-        //controller.setStage(stage);
         controller.establishConnection(ip, port, password);
-
-
 
     }
 

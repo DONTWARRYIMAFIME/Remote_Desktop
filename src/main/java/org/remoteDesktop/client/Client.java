@@ -1,13 +1,13 @@
 package org.remoteDesktop.client;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.remoteDesktop.App;
-import org.remoteDesktop.ConnectionStatus;
-import org.remoteDesktop.Loader;
-import org.remoteDesktop.Verification;
+import org.remoteDesktop.*;
 
 import java.io.Closeable;
 import java.io.DataInputStream;
@@ -15,33 +15,56 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Client extends Thread {
+public class Client extends Thread implements Closeable {
+
+    private ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> onResize();
 
     private final String ip;
     private final int port;
     private final String password;
 
-    private final Label status;
-    private final ImageView iw;
+    private Label status;
+    private ImageView iw;
+    private ToolBar toolBar;
+    private HBox hbox;
+    private Label serverIP;
+
+    private final List<Closeable> threads = new ArrayList<>();
 
     private ConnectionStatus connectionStatus = ConnectionStatus.UNKNOWN;
 
-    private void onResize() {
-        iw.setFitWidth(iw.getScene().getWidth());
-        iw.setFitHeight(iw.getScene().getHeight());
+    private void resetGUIElements() {
+        iw.setFitWidth(200);
+        iw.setFitHeight(150);
+        toolBar.setVisible(false);
+        status.setVisible(true);
     }
 
-    public Client(String ip, int port, String password, Label status, ImageView iw) {
+    private void onResize() {
+        hbox.setPrefWidth(iw.getScene().getWidth() - 20);
+        iw.setFitWidth(iw.getScene().getWidth());
+        iw.setFitHeight(iw.getScene().getHeight() - 64);
+
+    }
+
+    public Client(String ip, int port, String password) {
         this.ip = ip;
         this.port = port;
         this.password = password;
 
+        setDaemon(true);
+    }
+
+    public void setGUIElements(Label status, ImageView iw, ToolBar toolBar, Label serverIP) {
         this.status = status;
         this.iw = iw;
+        this.toolBar = toolBar;
+        this.serverIP = serverIP;
 
-        setDaemon(true);
-        start();
+        hbox = (HBox) toolBar.getItems().get(0);
     }
 
     @Override
@@ -54,6 +77,10 @@ public class Client extends Thread {
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
+            threads.add(socket);
+            threads.add(dis);
+            threads.add(dos);
+
             Authentication authentication = new Authentication(dis, dos, password);
 
             if (authentication.tryToConnect() != Verification.CORRECT) {
@@ -61,27 +88,32 @@ public class Client extends Thread {
             } else {
                 connectionStatus = ConnectionStatus.CONNECTED;
 
+                toolBar.setVisible(true);
                 status.setVisible(false);
 
                 double ssWidth = dis.readDouble();
                 double ssHeight = dis.readDouble();
 
-                Closeable thread  = new ReceiveScreen(dis, iw);
+                threads.add(new ReceiveScreen(dis, iw));
                 new SendEvents(dos, iw, ssWidth, ssHeight);
 
                 iw.setImage(null);
 
+                hbox.setPrefWidth(iw.getScene().getWidth() - 20);
                 iw.setFitWidth(iw.getScene().getWidth());
-                iw.setFitHeight(iw.getScene().getHeight());
+                iw.setFitHeight(iw.getScene().getHeight() - 64);
 
                 Platform.runLater(() -> {
+                    serverIP.setText("Connected to : " + socket.getLocalAddress().getHostAddress());
+
                     Stage stage = (Stage) iw.getScene().getWindow();
-                    stage.widthProperty().addListener((obs, oldVal, newVal) -> onResize());
-                    stage.heightProperty().addListener((obs, oldVal, newVal) -> onResize());
+
+                    stage.widthProperty().addListener(stageSizeListener);
+                    stage.heightProperty().addListener(stageSizeListener);
 
                     stage.setOnCloseRequest((event) -> {
                         try {
-                            thread.close();
+                            close();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -99,16 +131,36 @@ public class Client extends Thread {
         if (connectionStatus != ConnectionStatus.CONNECTED) {
             iw.setImage(Loader.loadImage("sad_smile.png"));
 
-            Platform.runLater(() -> status.setText("Ooops...an error occured :\n" + connectionStatus.getStatusName()));
+            Platform.runLater(() -> status.setText("Ops...an error occurred :\n" + connectionStatus.getStatusName()));
 
             try {
                 Thread.sleep(5000);
-                App.setRoot("mainScene");
-            } catch (InterruptedException e) {
+                resetGUIElements();
+                close();
+                Platform.runLater(() -> SceneController.setRoot("mainScene", EffectType.EASE_OUT));
+            } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
         }
 
     }
 
+    @Override
+    public void close() throws IOException {
+        Stage stage = (Stage) iw.getScene().getWindow();
+        stage.widthProperty().removeListener(stageSizeListener);
+        stage.heightProperty().removeListener(stageSizeListener);
+
+        for (Closeable thread : threads) {
+            thread.close();
+        }
+
+        interrupt();
+    }
+
+    public void onDisconnect() throws IOException {
+        resetGUIElements();
+        close();
+        Platform.runLater(() -> SceneController.setRoot("mainScene", EffectType.EASE_OUT));
+    }
 }

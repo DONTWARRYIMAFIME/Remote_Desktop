@@ -1,7 +1,9 @@
 package org.remoteDesktop.client;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.remoteDesktop.KeyEvents;
 
@@ -15,9 +17,22 @@ public class SendEvents {
     private final double ssWidth;
     private final double ssHeight;
 
+    private int convertMouseButton(MouseButton mouseButton) {
+        switch (mouseButton) {
+            case MIDDLE -> { return 5; }
+            case SECONDARY -> { return 4;}
+            default -> { return 16; }
+        }
+    }
+
     private void onMouseMove(MouseEvent e) {
-        double xScale = ssWidth / iw.getFitWidth();
-        double yScale = ssHeight / iw.getFitHeight();
+        Image image = iw.getImage();
+        double aspectRatio = image.getWidth() / image.getHeight();
+        double realWidth = Math.min(iw.getFitWidth(), iw.getFitHeight() * aspectRatio);
+        double realHeight = Math.min(iw.getFitHeight(), iw.getFitWidth() / aspectRatio);
+
+        double xScale = ssWidth / realWidth;
+        double yScale = ssHeight / realHeight;
 
         printWriter.println(KeyEvents.MOVE_MOUSE.getEventID());
         printWriter.println((int) (e.getX() * xScale));
@@ -27,23 +42,13 @@ public class SendEvents {
 
     private void onMousePressed(MouseEvent e) {
         printWriter.println(KeyEvents.PRESS_MOUSE.getEventID());
-        int button = e.getButton().ordinal();
-        int xButton = 16;
-        if(button==3){
-            xButton = 4;
-        }
-        printWriter.println(xButton);
+        printWriter.println(convertMouseButton(e.getButton()));
         printWriter.flush();
     }
 
     private void onMouseReleased(MouseEvent e) {
         printWriter.println(KeyEvents.RELEASE_MOUSE.getEventID());
-        int button = e.getButton().ordinal();
-        int xButton = 16;
-        if(button==3){
-            xButton = 4;
-        }
-        printWriter.println(xButton);
+        printWriter.println(convertMouseButton(e.getButton()));
         printWriter.flush();
     }
 

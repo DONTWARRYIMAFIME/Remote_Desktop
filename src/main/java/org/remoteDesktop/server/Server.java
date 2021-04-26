@@ -1,8 +1,11 @@
 package org.remoteDesktop.server;
 
+import javafx.application.Platform;
+import org.remoteDesktop.NotificationsController;
+
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.URL;
+import java.net.*;
+import java.util.Enumeration;
 import java.util.LinkedList;
 
 public class Server extends Thread implements Closeable {
@@ -31,17 +34,28 @@ public class Server extends Thread implements Closeable {
 
     public String getIP() {
 
-        String ip = null;
-
+        String ip;
         try {
-            URL url = new URL("http://checkip.amazonaws.com/");
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-            ip = br.readLine();
-        } catch (Exception e) {
-            System.out.println("Amazon server is not available");
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                // filters out 127.0.0.1 and inactive interfaces
+                if (iface.isLoopback() || !iface.isUp())
+                    continue;
+
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                if(addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    ip = addr.getHostAddress();
+                    System.out.println(iface.getDisplayName() + " " + ip);
+                    return ip;
+                }
+            }
+        } catch (SocketException e) {
+            throw new RuntimeException(e);
         }
 
-        return ip;
+        return "Null";
     }
 
     @Override
@@ -49,7 +63,9 @@ public class Server extends Thread implements Closeable {
 
         try {
             while (!interrupted()) {
-                threads.add(new ServerThread(socket.accept(), serverPassword));
+                threads.add(new ServerThread(threads, socket.accept(), serverPassword));
+                System.out.println(threads.size());
+                Platform.runLater(() -> NotificationsController.showNewUserNotification());
             }
         } catch (IOException e) {
             e.printStackTrace();

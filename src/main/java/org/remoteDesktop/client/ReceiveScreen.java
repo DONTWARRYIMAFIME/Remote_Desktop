@@ -4,6 +4,7 @@ import javafx.scene.image.ImageView;
 
 import javafx.scene.image.Image;
 import java.io.*;
+import java.net.SocketException;
 
 public class ReceiveScreen extends Thread implements Closeable {
 
@@ -33,6 +34,8 @@ public class ReceiveScreen extends Thread implements Closeable {
                 Image img = new Image(new ByteArrayInputStream(bytes));
                 iw.setImage(img);
 
+            } catch (SocketException e) {
+                System.out.println("Client: disconnected from server. Threads closed");
             } catch (IOException e) {
                 e.printStackTrace();
             }

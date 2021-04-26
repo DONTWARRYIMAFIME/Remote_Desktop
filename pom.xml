@@ -26,6 +26,11 @@
             <version>3.2.4</version>
             <type>maven-plugin</type>
         </dependency>
+        <dependency>
+            <groupId>org.trayNotification</groupId>
+            <artifactId>TrayNotification</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
