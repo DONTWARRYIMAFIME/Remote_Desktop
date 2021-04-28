@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #212528;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.connect.ConnectSceneController">
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <StackPane prefHeight="300.0" prefWidth="400.0">
+               <children>
+                  <Circle fx:id="circle1" fill="#ffffff00" radius="120.0" stroke="#1891db" strokeType="INSIDE" strokeWidth="10.0" style="-fx-stroke-dash-array: 70;">
+                     <effect>
+                        <Glow level="1.0" />
+                     </effect>
+                  </Circle>
+                  <Circle fx:id="circle2" fill="#ffffff00" radius="80.0" stroke="#412eb7" strokeType="INSIDE" strokeWidth="8.0" style="-fx-stroke-dash-array: 50;">
+                     <effect>
+                        <Glow level="1.0" />
+                     </effect>
+                  </Circle>
+                  <Circle fx:id="circle3" fill="#ffffff00" radius="40.0" stroke="#1891db" strokeType="INSIDE" strokeWidth="5.0" style="-fx-stroke-dash-array: 40;">
+                     <effect>
+                        <Glow level="1.0" />
+                     </effect>
+                  </Circle>
+               </children>
+            </StackPane>
+            <Label fx:id="status" alignment="CENTER" text="S T A T U S" textAlignment="CENTER" textFill="#ecf0f1">
+               <font>
+                  <Font name="System Italic" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

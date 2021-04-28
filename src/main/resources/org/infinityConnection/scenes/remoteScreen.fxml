@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToolbar?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.remoteScreen.RemoteScreenController">
+   <center>
+      <ImageView fx:id="iw" fitHeight="550.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+   </center>
+   <top>
+      <JFXToolbar prefHeight="50.0" style="-fx-background-color: #212528;" BorderPane.alignment="CENTER">
+         <left>
+            <Label fx:id="host" text="C O N N E C T E D  T O : " textFill="#ecf0f1" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </left>
+         <right>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#onDisconnect" ripplerFill="BLACK" style="-fx-background-color: #ff0000;" text="D I S C O N N E C T" textAlignment="CENTER" textFill="#ecf0f1" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </JFXButton>
+         </right>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+         <center>
+            <Label fx:id="timer" text="T I M E" textAlignment="CENTER" textFill="#ecf0f1" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </center>
+      </JFXToolbar>
+   </top>
+</BorderPane>

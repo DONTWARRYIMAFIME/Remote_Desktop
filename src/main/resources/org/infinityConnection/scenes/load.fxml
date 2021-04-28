@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.load.LoadSceneController">
+   <center>
+      <VBox fx:id="pane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #141414;" BorderPane.alignment="CENTER">
+         <children>
+            <Text fill="#ecf0f1" strokeType="OUTSIDE" text="W E L C O M E" textAlignment="CENTER">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Text>
+            <ImageView fitHeight="250.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/infinityblack.png" />
+               </image>
+            </ImageView>
+            <Text fill="#ecf0f1" strokeType="OUTSIDE" strokeWidth="0.0" text="T O">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Text>
+            <Text fill="#14a1ff" strokeType="OUTSIDE" strokeWidth="0.0" text="I N F I N I T Y   C O N N E C T I O N" textAlignment="CENTER">
+               <font>
+                  <Font name="System Italic" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <effect>
+                  <Glow level="1.0" />
+               </effect>
+            </Text>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

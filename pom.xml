@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.remoteDesktop</groupId>
-    <artifactId>Remote_Desktop</artifactId>
+    <groupId>org.inifinityConnection</groupId>
+    <artifactId>infinity-connection</artifactId>
     <version>1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,6 +25,11 @@
             <artifactId>maven-shade-plugin</artifactId>
             <version>3.2.4</version>
             <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>9.0.10</version>
         </dependency>
         <dependency>
             <groupId>org.trayNotification</groupId>
@@ -50,7 +55,7 @@
                                 <!-- add Main-Class to manifest file -->
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.remoteDesktop.Main</mainClass>
+                                    <mainClass>org.infinityConnection.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -60,7 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <release>14</release>
                     <source>14</source>
@@ -72,7 +77,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>org.remoteDesktop.App</mainClass>
+                    <mainClass>org.infinityConnection.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
