@@ -50,7 +50,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>FreeRemoteDesktop</finalName>
+                            <finalName>InfinityConnection</finalName>
                             <transformers>
                                 <!-- add Main-Class to manifest file -->
                                 <transformer
