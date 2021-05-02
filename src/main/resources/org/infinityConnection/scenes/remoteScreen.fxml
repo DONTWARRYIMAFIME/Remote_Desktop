@@ -13,7 +13,7 @@
       <ImageView fx:id="iw" fitHeight="550.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
    <top>
-      <JFXToolbar prefHeight="50.0" style="-fx-background-color: #212528;" BorderPane.alignment="CENTER">
+      <JFXToolbar fx:id="toolbar" prefHeight="50.0" style="-fx-background-color: #212528;" BorderPane.alignment="CENTER">
          <left>
             <Label fx:id="host" text="C O N N E C T E D  T O : " textFill="#ecf0f1" BorderPane.alignment="CENTER">
                <font>

@@ -1,8 +1,8 @@
 package org.infinityConnection.server;
 
 import javafx.application.Platform;
-import org.infinityConnection.NotificationsController;
-import org.infinityConnection.Verification;
+import org.infinityConnection.utils.NotificationsController;
+import org.infinityConnection.client.Verification;
 
 import java.awt.*;
 import java.io.*;
@@ -29,6 +29,9 @@ public class ServerThread extends Thread implements Closeable {
             if (!sEvent.isInterrupted() && !rEvent.isInterrupted()) {
                 continue;
             }
+//            if (!sEvent.isInterrupted()) {
+//                continue;
+//            }
             close();
             break;
         }
@@ -67,7 +70,6 @@ public class ServerThread extends Thread implements Closeable {
 
                 sEvent = new SendScreen(dos, robot, rectangle);
                 rEvent = new ReceiveEvents(dis, robot);
-
 
                 checkConnection();
 

@@ -1,9 +1,7 @@
 package org.infinityConnection.server;
 
 import javafx.application.Platform;
-import javafx.stage.Stage;
-import org.infinityConnection.NotificationsController;
-import org.infinityConnection.SceneController;
+import org.infinityConnection.utils.NotificationsController;
 
 import java.io.*;
 import java.net.*;

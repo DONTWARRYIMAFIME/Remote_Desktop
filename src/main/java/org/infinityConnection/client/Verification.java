@@ -1,4 +1,4 @@
-package org.infinityConnection;
+package org.infinityConnection.client;
 
 public enum Verification {
     UNKNOWN,

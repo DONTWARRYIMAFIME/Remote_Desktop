@@ -1,18 +1,11 @@
 package org.infinityConnection.scenes.remoteScreen;
 
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.event.EventType;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import org.infinityConnection.EffectType;
-import org.infinityConnection.SceneController;
-import org.infinityConnection.client.ReceiveScreen;
+import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 import org.infinityConnection.client.SendEvents;
+import org.infinityConnection.utils.GUIChangeListener;
+import org.infinityConnection.client.ReceiveScreen;
 
-import javax.swing.event.HyperlinkEvent;
-import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,100 +13,126 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class RemoteScreenModel extends Thread implements Closeable {
+public class RemoteScreenModel {
 
     private final DataInputStream dis;
     private final DataOutputStream dos;
 
-    private Label host;
-    private Label lbTimer;
-    private ImageView iw;
-
-    private final ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> onResize();
-    private Closeable receiveScreen;
+    private String hostName = "Undefined";
 
     private final Timer timer = new Timer();
-    private int secondsFromConnection = 0;
+    private int seconds = 0;
+
+    private boolean stopWasRequested = false;
+    private final ExecutorService service = Executors.newCachedThreadPool();
+    private final List<GUIChangeListener> listeners = new ArrayList<>();
+
+    private ReceiveScreen receiveScreen;
+    private SendEvents sendEvents;
 
     private TimerTask getTask() {
         return new TimerTask() {
             @Override
             public void run() {
-                secondsFromConnection++;
-
-                int seconds = secondsFromConnection % 60;
-                int minutes = secondsFromConnection / 60;
-                int hours = minutes / 60;
-
-                Platform.runLater(() -> lbTimer.setText(hours + " : " + minutes + " : " + seconds));
+                seconds++;
             }
         };
     }
 
-    private void onResize() {
-        iw.setFitWidth(iw.getScene().getWidth());
-        iw.setFitHeight(iw.getScene().getHeight() - 40);
+    private void fireGUIChangeEvent() {
+        for (GUIChangeListener listener : listeners) {
+            listener.onReadingChange();
+        }
     }
 
     public RemoteScreenModel(DataInputStream dis, DataOutputStream dos) {
         this.dis = dis;
         this.dos = dos;
 
-        setDaemon(true);
+        service.submit(() -> {
+            try {
+                double ssWidth = dis.readDouble();
+                double ssHeight = dis.readDouble();
+
+                hostName = dis.readUTF();
+
+                receiveScreen = new ReceiveScreen(dis);
+                sendEvents = new SendEvents(dos, ssWidth, ssHeight);
+
+                timer.scheduleAtFixedRate(getTask(), 1000, 1000);
+
+                while (!stopWasRequested) {
+                    Thread.sleep(40);
+                    fireGUIChangeEvent();
+                }
+
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    public void setGUIElements(Label host, Label lbTimer, ImageView iw) {
-        this.host = host;
-        this.lbTimer = lbTimer;
-        this.iw = iw;
+    public void addListener(GUIChangeListener listener) {
+        listeners.add(listener);
     }
 
-    @Override
-    public void run() {
+    public void removeListener(GUIChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    public String getHostName() {
+        return "C O N N E C T E D  T O : " + hostName;
+    }
+
+    public String getSessionTime() {
+        int s = seconds % 60;
+        int m = seconds / 60;
+        int h = m / 60;
+
+        return h + " : " + m + " : " + s;
+    }
+
+    public EventHandler getMouseMovedEH(double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {
+        return sendEvents.getMouseMovedEH(iwWidth, iwHeight, iwFitWidth, iwFitHeight);
+    }
+
+    public EventHandler getMousePressedEH() {
+        return sendEvents.getMousePressedEH();
+    }
+
+    public EventHandler getMouseReleasedEH() {
+        return sendEvents.getMouseReleasedEH();
+    }
+
+    public EventHandler getKeyPressedEH() {
+        return sendEvents.getKeyPressedEH();
+    }
+
+    public EventHandler getKeyReleasedEH() {
+        return sendEvents.getKeyReleasedEH();
+    }
+
+    public Image getReceivedImage() {
+        return receiveScreen.getReceivedImage();
+    }
+
+    public void shutDown() {
+        stopWasRequested = true;
+
+        timer.cancel();
+
         try {
-            double ssWidth = dis.readDouble();
-            double ssHeight = dis.readDouble();
-
-            String hostName = dis.readUTF();
-
-            receiveScreen = new ReceiveScreen(dis, iw);
-            new SendEvents(dos, iw, ssWidth, ssHeight);
-
-            iw.setImage(null);
-
-            iw.setFitWidth(iw.getScene().getWidth());
-            iw.setFitHeight(iw.getScene().getHeight() - 40);
-
-            timer.scheduleAtFixedRate(getTask(), 1000, 1000);
-
-            Platform.runLater(() -> {
-                host.setText("C O N N E C T E D  T O : " + hostName);
-
-                Stage stage = (Stage) iw.getScene().getWindow();
-
-                stage.widthProperty().addListener(stageSizeListener);
-                stage.heightProperty().addListener(stageSizeListener);
-
-            });
+            dis.close();
+            dos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        receiveScreen.shutDown();
+        service.shutdown();
     }
 
-    @Override
-    public void close() throws IOException {
-        Stage stage = (Stage) SceneController.scene.getWindow();
-        stage.widthProperty().removeListener(stageSizeListener);
-        stage.heightProperty().removeListener(stageSizeListener);
-
-        timer.cancel();
-
-        receiveScreen.close();
-        dis.close();
-        dos.close();
-
-        interrupt();
-    }
 }

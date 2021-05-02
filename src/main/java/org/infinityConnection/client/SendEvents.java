@@ -1,36 +1,34 @@
 package org.infinityConnection.client;
 
-import javafx.application.Platform;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import org.infinityConnection.KeyEvents;
+import org.infinityConnection.utils.KeyEvents;
 
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 
 public class SendEvents {
 
-    private final PrintWriter printWriter;
-    private final ImageView iw;
     private final double ssWidth;
     private final double ssHeight;
+    private final PrintWriter printWriter;
 
     private int convertMouseButton(MouseButton mouseButton) {
         switch (mouseButton) {
+            case PRIMARY -> { return 16; }
             case MIDDLE -> { return 5; }
             case SECONDARY -> { return 4;}
-            default -> { return 16; }
+            default -> { return 0; }
         }
     }
 
-    private void onMouseMove(MouseEvent e) {
-        Image image = iw.getImage();
-        double aspectRatio = image.getWidth() / image.getHeight();
-        double realWidth = Math.min(iw.getFitWidth(), iw.getFitHeight() * aspectRatio);
-        double realHeight = Math.min(iw.getFitHeight(), iw.getFitWidth() / aspectRatio);
+    private void onMouseMove(MouseEvent e, double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {
+
+        double aspectRatio = iwWidth / iwHeight;
+        double realWidth = Math.min(iwFitWidth, iwFitHeight * aspectRatio);
+        double realHeight = Math.min(iwFitHeight, iwFitWidth / aspectRatio);
 
         double xScale = ssWidth / realWidth;
         double yScale = ssHeight / realHeight;
@@ -55,29 +53,47 @@ public class SendEvents {
 
     private void onKeyPressed(KeyEvent e) {
         printWriter.println(KeyEvents.PRESS_KEY.getEventID());
-        printWriter.println(java.awt.event.KeyEvent.VK_X);
+        printWriter.println(java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0)));
         printWriter.flush();
     }
 
     private void onKeyReleased(KeyEvent e) {
-        printWriter.println(KeyEvents.RELEASE_KEY.getEventID());
-        printWriter.println(java.awt.event.KeyEvent.VK_X);
-        printWriter.flush();
+//        printWriter.println(KeyEvents.RELEASE_KEY.getEventID());
+//        printWriter.println(java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0)));
+//        printWriter.flush();
     }
 
-    public SendEvents(DataOutputStream dos, ImageView iw, double ssWidth, double ssHeight) {
+    public SendEvents(DataOutputStream dos, double ssWidth, double ssHeight) {
         this.printWriter = new PrintWriter(dos);
-        this.iw = iw;
         this.ssWidth = ssWidth;
         this.ssHeight = ssHeight;
+//        iw.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onMouseMove);
+//        iw.addEventHandler(MouseEvent.MOUSE_PRESSED, this::onMousePressed);
+//        iw.addEventHandler(MouseEvent.MOUSE_RELEASED, this::onMouseReleased);
+//        iw.addEventHandler(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+//        iw.addEventHandler(KeyEvent.KEY_RELEASED, this::onKeyReleased);
+//
+//        Platform.runLater(() -> iw.requestFocus());
+    }
 
-        iw.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onMouseMove);
-        iw.addEventHandler(MouseEvent.MOUSE_PRESSED, this::onMousePressed);
-        iw.addEventHandler(MouseEvent.MOUSE_RELEASED, this::onMouseReleased);
-        iw.addEventHandler(KeyEvent.KEY_PRESSED, this::onKeyPressed);
-        iw.addEventHandler(KeyEvent.KEY_RELEASED, this::onKeyReleased);
+    public EventHandler getMouseMovedEH(double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {
+        return event -> onMouseMove((MouseEvent) event, iwWidth, iwHeight, iwFitWidth, iwFitHeight);
+    }
 
-        Platform.runLater(() -> iw.requestFocus());
+    public EventHandler getMousePressedEH() {
+        return event -> onMousePressed((MouseEvent) event);
+    }
+
+    public EventHandler getMouseReleasedEH() {
+        return event -> onMouseReleased((MouseEvent) event);
+    }
+
+    public EventHandler getKeyPressedEH() {
+        return event -> onKeyPressed((KeyEvent) event);
+    }
+
+    public EventHandler getKeyReleasedEH() {
+        return event -> onKeyReleased((KeyEvent) event);
     }
 
 }

@@ -1,4 +1,4 @@
-package org.infinityConnection;
+package org.infinityConnection.utils;
 
 public enum ConnectionStatus {
     UNKNOWN("Unknown status"),
@@ -8,7 +8,7 @@ public enum ConnectionStatus {
     WRONG_PASSWORD("Wrong password"),
     CONNECTED("Successfully connected!");
 
-    private String statusName;
+    private final String statusName;
 
     ConnectionStatus(String statusName) {
         this.statusName = statusName;

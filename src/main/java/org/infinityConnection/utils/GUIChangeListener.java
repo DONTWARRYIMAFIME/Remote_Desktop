@@ -1,4 +1,4 @@
-package org.infinityConnection.scenes.remoteScreen;
+package org.infinityConnection.utils;
 
 @FunctionalInterface
 public interface GUIChangeListener {

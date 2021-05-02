@@ -1,4 +1,4 @@
-package org.infinityConnection;
+package org.infinityConnection.utils;
 
 import javafx.util.Duration;
 import org.trayNotification.animations.Animations;

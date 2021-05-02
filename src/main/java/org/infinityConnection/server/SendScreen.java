@@ -30,7 +30,7 @@ public class SendScreen extends Thread implements Closeable {
                 BufferedImage image = robot.createScreenCapture(rectangle);
                 ImageIO.write(image, "jpeg", dos);
 
-                Thread.sleep(10);
+                Thread.sleep(40);
             }
 
         } catch (IOException | InterruptedException e) {

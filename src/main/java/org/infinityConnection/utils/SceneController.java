@@ -1,4 +1,4 @@
-package org.infinityConnection;
+package org.infinityConnection.utils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;

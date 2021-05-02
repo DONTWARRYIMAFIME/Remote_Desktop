@@ -1,58 +1,58 @@
 package org.infinityConnection.client;
 
-import javafx.scene.image.ImageView;
-
 import javafx.scene.image.Image;
-import java.io.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.net.SocketException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class ReceiveScreen extends Thread implements Closeable {
+public class ReceiveScreen {
 
-    private final DataInputStream dis;
-    private final ImageView iw;
+    private DataInputStream dis;
 
-    public ReceiveScreen(DataInputStream dis, ImageView iw) {
-        this.dis = dis;
-        this.iw = iw;
+    private boolean stopWasRequested = false;
+    private final ExecutorService service = Executors.newCachedThreadPool();
 
-        setDaemon(true);
-        start();
-    }
+    private Image image;
 
-    @Override
-    public void run() {
+    private void updateImage() {
+        try {
+            byte[] bytes = new byte[1024 * 1024];
+            int count = 0;
+            do {
+                count += dis.read(bytes, count, bytes.length - count);
+            } while (!(count > 4 && bytes[count - 2] == (byte) - 1 && bytes[count - 1] == (byte) - 39));
 
-        while(!interrupted()) {
+            image = new Image(new ByteArrayInputStream(bytes));
 
-            try {
-                byte[] bytes = new byte[1024 * 1024];
-                int count = 0;
-                do {
-                    count += dis.read(bytes, count, bytes.length - count);
-                } while (!(count > 4 && bytes[count - 2] == (byte) - 1 && bytes[count - 1] == (byte) - 39));
-
-                Image img = new Image(new ByteArrayInputStream(bytes));
-                iw.setImage(img);
-
-            } catch (SocketException e) {
-                System.out.println("Client: disconnected from server. Threads closed");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                try {
-                    close();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            }
-
+        } catch (SocketException e) {
+            System.out.println("Client: disconnected from server. Threads closed");
+            shutDown();
+        } catch (Exception e) {
+            e.printStackTrace();
+            shutDown();
         }
-
     }
 
-    @Override
-    public void close() throws IOException {
-        dis.close();
-        interrupt();
+    public ReceiveScreen(DataInputStream dis) {
+        this. dis = dis;
+
+        service.submit(() -> {
+            while(!stopWasRequested) {
+                updateImage();
+            }
+        });
     }
+
+    public Image getReceivedImage() {
+        return image;
+    }
+
+    public void shutDown() {
+        stopWasRequested = true;
+        service.shutdown();
+    }
+
 }

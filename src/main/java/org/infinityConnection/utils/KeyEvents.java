@@ -1,4 +1,4 @@
-package org.infinityConnection;
+package org.infinityConnection.utils;
 
 public enum KeyEvents {
     UNKNOWN_EVENT(0),
@@ -8,7 +8,7 @@ public enum KeyEvents {
     RELEASE_KEY(4),
     MOVE_MOUSE(5);
 
-    private int eventID;
+    private final int eventID;
 
     KeyEvents(int eventID){
         this.eventID = eventID;

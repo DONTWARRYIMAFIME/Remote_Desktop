@@ -1,8 +1,9 @@
 package org.infinityConnection.server;
 
-import org.infinityConnection.KeyEvents;
+import org.infinityConnection.utils.KeyEvents;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.util.NoSuchElementException;
@@ -33,6 +34,10 @@ public class ReceiveEvents extends Thread implements Closeable {
 
                     System.out.println(command.toString());
 
+                    //robot.mouseMove(0, 0);
+
+                    //System.out.println(KeyEvent.getKeyText(scanner.nextInt()));
+
                     switch (command) {
                         case PRESS_MOUSE -> robot.mousePress(scanner.nextInt());
                         case RELEASE_MOUSE -> robot.mouseRelease(scanner.nextInt());
@@ -42,7 +47,9 @@ public class ReceiveEvents extends Thread implements Closeable {
                         default -> System.out.println("ReceiveEvents. Unknown event");
                     }
 
-                    robot.delay(1000);
+
+
+                    //robot.delay(1000);
                 }
             }
 

@@ -1,16 +1,18 @@
 package org.infinityConnection.scenes.remoteScreen;
 
+import com.jfoenix.controls.JFXToolbar;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import org.infinityConnection.EffectType;
-import org.infinityConnection.SceneController;
+import org.infinityConnection.utils.EffectType;
+import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 
 public class RemoteScreenController {
 
@@ -23,25 +25,112 @@ public class RemoteScreenController {
     @FXML
     private ImageView iw;
 
+    @FXML
+    private JFXToolbar toolbar;
+
+    private double iwWidth;
+    private double iwHeight;
+
+    private double iwFitWidth;
+    private double iwFitHeight;
+
+    private Stage stage;
     private RemoteScreenModel model;
+    private final ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> onResize();
 
-    public void exchangeData(DataInputStream dis, DataOutputStream dos) {
-        model = new RemoteScreenModel(dis, dos);
-        model.setGUIElements(host, timer, iw);
-        model.start();
-
-        Stage stage = (Stage) SceneController.scene.getWindow();
-        stage.setOnCloseRequest((e) -> {
-            try {
-                model.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+    private void updateHostName() {
+        Platform.runLater(() -> host.setText(model.getHostName()));
+        model.removeListener(this::updateHostName);
     }
 
-    public void onDisconnect() throws IOException {
-        model.close();
+    private void updateTimer() {
+        Platform.runLater(() -> timer.setText(model.getSessionTime()));
+    }
+
+    private void updateScreen() {
+        Image image = iw.getImage();
+        Platform.runLater(() -> {
+            iw.setImage(model.getReceivedImage());
+            if (image == null) {
+                onResize();
+            }
+        });
+
+    }
+
+    private void onResize() {
+        iwFitWidth = iw.getScene().getWidth();
+        iwFitHeight = iw.getScene().getHeight() - toolbar.getHeight();
+
+        iw.setFitWidth(iwFitWidth);
+        iw.setFitHeight(iwFitHeight);
+
+        Image image = iw.getImage();
+        iwWidth = image.getWidth();
+        iwHeight = image.getHeight();
+
+        model.addListener(this::onMouseMoved);
+    }
+
+    //Mouse events
+    private void onMouseMoved() {
+        iw.setOnMouseClicked(model.getMouseMovedEH(iwWidth, iwHeight, iwFitWidth, iwFitHeight));
+        model.removeListener(this::onMousePressed);
+    }
+
+    private void onMousePressed() {
+        iw.setOnMousePressed(model.getMousePressedEH());
+        model.removeListener(this::onMousePressed);
+    }
+
+    private void onMouseReleased() {
+        iw.setOnMouseReleased(model.getMouseReleasedEH());
+        model.removeListener(this::onMouseReleased);
+    }
+
+    //Keyboard events
+    private void onKeyPressed() {
+        iw.setOnKeyTyped(model.getKeyPressedEH());
+        model.removeListener(this::onKeyPressed);
+    }
+
+    private void onKeyReleased() {
+        iw.setOnKeyReleased(model.getKeyReleasedEH());
+        model.removeListener(this::onKeyReleased);
+    }
+
+    public void initialize() {
+    }
+
+    public void exchangeData(DataInputStream dis, DataOutputStream dos) {
+
+        Platform.runLater(() -> iw.requestFocus() );
+
+        model = new RemoteScreenModel(dis, dos);
+
+        stage = (Stage) SceneController.scene.getWindow();
+        stage.setOnCloseRequest((e) -> model.shutDown());
+
+        stage.widthProperty().addListener(stageSizeListener);
+        stage.heightProperty().addListener(stageSizeListener);
+
+        model.addListener(this::updateHostName);
+        model.addListener(this::updateTimer);
+        model.addListener(this::updateScreen);
+
+        //Events
+        model.addListener(this::onMousePressed);
+        model.addListener(this::onMouseReleased);
+
+        model.addListener(this::onKeyPressed);
+        model.addListener(this::onKeyReleased);
+    }
+
+    public void onDisconnect() {
+        iw.setImage(null);
+        model.shutDown();
+        stage.widthProperty().removeListener(stageSizeListener);
+        stage.heightProperty().removeListener(stageSizeListener);
         Platform.runLater(() -> SceneController.setRoot("mainScene", EffectType.EASE_OUT));
     }
 }

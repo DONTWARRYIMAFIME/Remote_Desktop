@@ -4,8 +4,6 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import org.infinityConnection.EffectType;
-import org.infinityConnection.SceneController;
 import org.infinityConnection.scenes.main.MainScene;
 
 public class LoadSceneController {

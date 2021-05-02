@@ -1,7 +1,5 @@
 package org.infinityConnection.client;
 
-import org.infinityConnection.Verification;
-
 import java.io.*;
 import java.net.Socket;
 

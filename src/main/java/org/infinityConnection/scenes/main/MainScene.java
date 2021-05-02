@@ -1,8 +1,8 @@
 package org.infinityConnection.scenes.main;
 
 import javafx.fxml.FXMLLoader;
-import org.infinityConnection.EffectType;
-import org.infinityConnection.SceneController;
+import org.infinityConnection.utils.EffectType;
+import org.infinityConnection.utils.SceneController;
 
 public class MainScene {
     public MainScene() {

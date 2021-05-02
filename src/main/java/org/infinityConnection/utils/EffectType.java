@@ -1,4 +1,4 @@
-package org.infinityConnection;
+package org.infinityConnection.utils;
 
 public enum EffectType {
     NULL,
