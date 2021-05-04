@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 public class ConnectSceneModel {
 
-    public static ConnectionStatus connectionStatus = ConnectionStatus.UNKNOWN;
+    private ConnectionStatus connectionStatus = ConnectionStatus.UNKNOWN;
     private RemoteScreen remoteScreen;
 
     private boolean stopWasRequested = false;
@@ -72,6 +72,9 @@ public class ConnectSceneModel {
                     e.printStackTrace();
                 }
                 fireGUIChangeEvent();
+                if (remoteScreen != null) {
+                    connectionStatus = remoteScreen.getConnectionStatus();
+                }
             }
         });
 

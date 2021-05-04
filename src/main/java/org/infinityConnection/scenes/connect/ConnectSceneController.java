@@ -72,18 +72,16 @@ public class ConnectSceneController {
     }
 
     private void updateConnectionStatus() {
-        System.out.println(connectionStatus.getStatusName());
-
         connectionStatus = model.getConnectionStatus();
 
         if (connectionStatus != ConnectionStatus.CONNECTING) {
             updateLabel();
-            if (connectionStatus != ConnectionStatus.CONNECTED) {
-                setErrorColors();
-                changeScene();
-            } else {
+            if (connectionStatus == ConnectionStatus.CONNECTED) {
                 setSuccessColors();
+            } else {
+                setErrorColors();
                 model.shutDown();
+                changeScene();
             }
         }
 

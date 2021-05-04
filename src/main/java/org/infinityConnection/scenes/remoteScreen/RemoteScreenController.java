@@ -45,10 +45,7 @@ public class RemoteScreenController {
     private void updateConnectionStatus() {
         connectionStatus = model.getConnectionStatus();
         if (connectionStatus != ConnectionStatus.CONNECTED) {
-            Platform.runLater(() -> {
-                SceneController.setRoot("connectScene", EffectType.EASE_OUT);
-                ConnectSceneModel.connectionStatus = connectionStatus;
-            });
+            Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
         }
     }
 
@@ -73,17 +70,19 @@ public class RemoteScreenController {
     }
 
     private void onResize() {
-        iwFitWidth = iw.getScene().getWidth();
-        iwFitHeight = iw.getScene().getHeight() - toolbar.getHeight();
+        try {
+            iwFitWidth = iw.getScene().getWidth();
+            iwFitHeight = iw.getScene().getHeight() - toolbar.getHeight();
 
-        iw.setFitWidth(iwFitWidth);
-        iw.setFitHeight(iwFitHeight);
+            iw.setFitWidth(iwFitWidth);
+            iw.setFitHeight(iwFitHeight);
 
-        Image image = iw.getImage();
-        iwWidth = image.getWidth();
-        iwHeight = image.getHeight();
+            Image image = iw.getImage();
+            iwWidth = image.getWidth();
+            iwHeight = image.getHeight();
 
-        model.addListener(this::onMouseMoved);
+            model.addListener(this::onMouseMoved);
+        } catch (NullPointerException e) {}
     }
 
     //Mouse events
@@ -125,8 +124,6 @@ public class RemoteScreenController {
         stage.widthProperty().addListener(stageSizeListener);
         stage.heightProperty().addListener(stageSizeListener);
 
-        model.addListener(this::updateConnectionStatus);
-
         model.addListener(this::updateHostName);
         model.addListener(this::updateTimer);
         model.addListener(this::updateScreen);
@@ -137,6 +134,8 @@ public class RemoteScreenController {
 
         model.addListener(this::onKeyPressed);
         model.addListener(this::onKeyReleased);
+
+        model.addListener(this::updateConnectionStatus);
     }
 
     public ConnectionStatus getConnectionStatus() {
@@ -145,9 +144,10 @@ public class RemoteScreenController {
 
     public void onDisconnect() {
         iw.setImage(null);
-        model.shutDown();
+
         stage.widthProperty().removeListener(stageSizeListener);
         stage.heightProperty().removeListener(stageSizeListener);
-        Platform.runLater(() -> SceneController.setRoot("mainScene", EffectType.EASE_OUT));
+
+        model.shutDown();
     }
 }
