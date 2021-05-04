@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import org.infinityConnection.scenes.connect.ConnectSceneModel;
 import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.SceneController;
@@ -45,6 +44,11 @@ public class RemoteScreenController {
     private void updateConnectionStatus() {
         connectionStatus = model.getConnectionStatus();
         if (connectionStatus != ConnectionStatus.CONNECTED) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
         }
     }

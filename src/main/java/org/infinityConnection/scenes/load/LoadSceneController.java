@@ -4,7 +4,7 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import org.infinityConnection.scenes.main.MainScene;
+import org.infinityConnection.scenes.container.ContainerScene;
 
 public class LoadSceneController {
 
@@ -21,7 +21,7 @@ public class LoadSceneController {
         fadeOut.setDelay(Duration.seconds(2));
         fadeOut.play();
 
-        fadeOut.setOnFinished((e) -> new MainScene());
+        fadeOut.setOnFinished((e) -> new ContainerScene());
 
     }
 

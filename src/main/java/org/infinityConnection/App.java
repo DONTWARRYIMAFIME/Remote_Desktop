@@ -16,6 +16,8 @@ public class App extends Application {
         stage.getIcons().add(Loader.loadImage("images/icon.png"));
 
         SceneController.addScene("loadScene", Loader.loadFXML("scenes/load"));
+        SceneController.addScene("drawerScene", Loader.loadFXML("scenes/drawer"));
+        SceneController.addScene("containerScene", Loader.loadFXML("scenes/container"));
         SceneController.addScene("mainScene", Loader.loadFXML("scenes/main"));
         SceneController.addScene("connectScene", Loader.loadFXML("scenes/connect"));
         SceneController.addScene("remoteScreen", Loader.loadFXML("scenes/remoteScreen"));

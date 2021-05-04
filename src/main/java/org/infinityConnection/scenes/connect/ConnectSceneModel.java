@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.client.Verification;
 import org.infinityConnection.client.Authentication;
+import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.GUIChangeListener;
 import org.infinityConnection.scenes.remoteScreen.RemoteScreen;
+import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
