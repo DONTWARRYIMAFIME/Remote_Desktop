@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.infinityConnection.scenes.connect.ConnectSceneModel;
+import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.SceneController;
 
@@ -34,9 +36,19 @@ public class RemoteScreenController {
     private double iwFitWidth;
     private double iwFitHeight;
 
+    private ConnectionStatus connectionStatus = ConnectionStatus.CONNECTED;
+
     private Stage stage;
     private RemoteScreenModel model;
     private final ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> onResize();
+
+    private void updateConnectionStatus() {
+        connectionStatus = model.getConnectionStatus();
+        if (connectionStatus != ConnectionStatus.CONNECTED) {
+            Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
+            ConnectSceneModel.connectionStatus = connectionStatus;
+        }
+    }
 
     private void updateHostName() {
         Platform.runLater(() -> host.setText(model.getHostName()));
@@ -99,9 +111,6 @@ public class RemoteScreenController {
         model.removeListener(this::onKeyReleased);
     }
 
-    public void initialize() {
-    }
-
     public void exchangeData(DataInputStream dis, DataOutputStream dos) {
 
         Platform.runLater(() -> iw.requestFocus() );
@@ -114,6 +123,8 @@ public class RemoteScreenController {
         stage.widthProperty().addListener(stageSizeListener);
         stage.heightProperty().addListener(stageSizeListener);
 
+        model.addListener(this::updateConnectionStatus);
+
         model.addListener(this::updateHostName);
         model.addListener(this::updateTimer);
         model.addListener(this::updateScreen);
@@ -124,6 +135,10 @@ public class RemoteScreenController {
 
         model.addListener(this::onKeyPressed);
         model.addListener(this::onKeyReleased);
+    }
+
+    public ConnectionStatus getConnectionStatus() {
+        return connectionStatus;
     }
 
     public void onDisconnect() {

@@ -6,6 +6,7 @@ public enum ConnectionStatus {
     UNKNOWN_HOST("Unknown host"),
     TIME_OUT("Timeout exceeded"),
     WRONG_PASSWORD("Wrong password"),
+    DROPPED_CONNECTION("Server dropped the connection"),
     CONNECTED("Successfully connected!");
 
     private final String statusName;

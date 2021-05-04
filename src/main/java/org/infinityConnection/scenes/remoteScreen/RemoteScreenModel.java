@@ -3,6 +3,7 @@ package org.infinityConnection.scenes.remoteScreen;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import org.infinityConnection.client.SendEvents;
+import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.GUIChangeListener;
 import org.infinityConnection.client.ReceiveScreen;
 
@@ -81,6 +82,10 @@ public class RemoteScreenModel {
 
     public void removeListener(GUIChangeListener listener) {
         listeners.remove(listener);
+    }
+
+    public ConnectionStatus getConnectionStatus() {
+        return receiveScreen.getConnectionStatus();
     }
 
     public String getHostName() {

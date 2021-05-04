@@ -1,6 +1,7 @@
 package org.infinityConnection.scenes.remoteScreen;
 
 import javafx.fxml.FXMLLoader;
+import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.SceneController;
 
@@ -9,11 +10,20 @@ import java.io.DataOutputStream;
 
 public class RemoteScreen {
 
-    public RemoteScreen(DataInputStream dis, DataOutputStream dos) {
+    private final RemoteScreenController controller;
+
+    public RemoteScreen() {
         FXMLLoader loader = SceneController.getFXMLLoader("remoteScreen");
-        RemoteScreenController controller = loader.getController();
+        controller = loader.getController();
 
         SceneController.setRoot("remoteScreen", EffectType.EASE_IN);
+    }
+
+    public ConnectionStatus getConnectionStatus() {
+        return controller.getConnectionStatus();
+    }
+
+    public void exchangeData(DataInputStream dis, DataOutputStream dos) {
         controller.exchangeData(dis, dos);
     }
 

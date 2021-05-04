@@ -1,15 +1,18 @@
 package org.infinityConnection.client;
 
 import javafx.scene.image.Image;
+import org.infinityConnection.utils.ConnectionStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.net.ConnectException;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ReceiveScreen {
 
+    private ConnectionStatus connectionStatus = ConnectionStatus.CONNECTED;
     private DataInputStream dis;
 
     private boolean stopWasRequested = false;
@@ -46,12 +49,17 @@ public class ReceiveScreen {
         });
     }
 
+    public ConnectionStatus getConnectionStatus() {
+        return connectionStatus;
+    }
+
     public Image getReceivedImage() {
         return image;
     }
 
     public void shutDown() {
         stopWasRequested = true;
+        connectionStatus = ConnectionStatus.DROPPED_CONNECTION;
         service.shutdown();
     }
 

@@ -19,7 +19,8 @@ import java.util.concurrent.Executors;
 
 public class ConnectSceneModel {
 
-    private ConnectionStatus connectionStatus = ConnectionStatus.UNKNOWN;
+    public static ConnectionStatus connectionStatus = ConnectionStatus.UNKNOWN;
+    private RemoteScreen remoteScreen;
 
     private boolean stopWasRequested = false;
     private final ExecutorService service = Executors.newCachedThreadPool();
@@ -50,7 +51,10 @@ public class ConnectSceneModel {
                 } else {
                     connectionStatus = ConnectionStatus.CONNECTED;
                     Thread.sleep(2000);
-                    Platform.runLater(() -> new RemoteScreen(dis, dos));
+                    Platform.runLater(() -> {
+                        remoteScreen = new RemoteScreen();
+                        remoteScreen.exchangeData(dis, dos);
+                    });
                 }
 
             } catch (UnknownHostException e) {
