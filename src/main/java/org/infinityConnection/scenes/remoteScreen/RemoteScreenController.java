@@ -45,8 +45,10 @@ public class RemoteScreenController {
     private void updateConnectionStatus() {
         connectionStatus = model.getConnectionStatus();
         if (connectionStatus != ConnectionStatus.CONNECTED) {
-            Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
-            ConnectSceneModel.connectionStatus = connectionStatus;
+            Platform.runLater(() -> {
+                SceneController.setRoot("connectScene", EffectType.EASE_OUT);
+                ConnectSceneModel.connectionStatus = connectionStatus;
+            });
         }
     }
 
