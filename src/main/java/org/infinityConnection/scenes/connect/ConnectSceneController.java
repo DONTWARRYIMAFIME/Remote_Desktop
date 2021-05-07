@@ -11,6 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EffectType;
+import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.utils.SceneController;
 
 import java.util.ArrayList;
@@ -71,20 +72,29 @@ public class ConnectSceneController {
         }
     }
 
-    private void updateConnectionStatus() {
-        connectionStatus = model.getConnectionStatus();
+    private EventsChangeListener updateConnectionStatus() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                connectionStatus = model.getConnectionStatus();
 
-        if (connectionStatus != ConnectionStatus.CONNECTING) {
-            updateLabel();
-            if (connectionStatus == ConnectionStatus.CONNECTED) {
-                setSuccessColors();
-            } else {
-                setErrorColors();
-                model.shutDown();
-                changeScene();
+                if (connectionStatus != ConnectionStatus.CONNECTING) {
+                    updateLabel();
+                    if (connectionStatus == ConnectionStatus.CONNECTED) {
+                        setSuccessColors();
+                    } else {
+                        setErrorColors();
+                        model.shutDown();
+                        changeScene();
+                    }
+                }
             }
-        }
 
+            @Override
+            public boolean isAutoCloasable() {
+                return false;
+            }
+        };
     }
 
     private void updateLabel() {
@@ -97,7 +107,7 @@ public class ConnectSceneController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Platform.runLater(() -> SceneController.setRoot("mainScene", EffectType.EASE_OUT));
+        Platform.runLater(() -> SceneController.setRoot("containerScene", EffectType.EASE_OUT));
     }
 
     private void initColorsArray() {
@@ -123,7 +133,7 @@ public class ConnectSceneController {
         status.setText(ConnectionStatus.CONNECTING.getStatusName());
 
         model = new ConnectSceneModel(ip, port, password);
-        model.addListener(this::updateConnectionStatus);
+        model.addListener(updateConnectionStatus());
     }
 
 }

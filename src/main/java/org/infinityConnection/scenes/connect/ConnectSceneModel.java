@@ -2,12 +2,10 @@ package org.infinityConnection.scenes.connect;
 
 import javafx.application.Platform;
 import org.infinityConnection.utils.ConnectionStatus;
-import org.infinityConnection.client.Verification;
-import org.infinityConnection.client.Authentication;
-import org.infinityConnection.utils.EffectType;
-import org.infinityConnection.utils.GUIChangeListener;
+import org.infinityConnection.scenes.client.Verification;
+import org.infinityConnection.scenes.client.Authentication;
+import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.scenes.remoteScreen.RemoteScreen;
-import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,11 +25,14 @@ public class ConnectSceneModel {
     private boolean stopWasRequested = false;
     private final ExecutorService service = Executors.newCachedThreadPool();
     private final ExecutorService listener = Executors.newCachedThreadPool();
-    private final List<GUIChangeListener> listeners = new ArrayList<>();
+    private final List<EventsChangeListener> listeners = new ArrayList<>();
 
     private void fireGUIChangeEvent() {
-        for (GUIChangeListener listener : listeners) {
+        for (EventsChangeListener listener : listeners) {
             listener.onReadingChange();
+            if (listener.isAutoCloasable()) {
+                listeners.remove(listener);
+            }
         }
     }
 
@@ -82,7 +83,7 @@ public class ConnectSceneModel {
 
     }
 
-    public void addListener(GUIChangeListener listener) {
+    public void addListener(EventsChangeListener listener) {
         listeners.add(listener);
     }
 

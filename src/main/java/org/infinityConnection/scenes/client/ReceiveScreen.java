@@ -1,11 +1,10 @@
-package org.infinityConnection.client;
+package org.infinityConnection.scenes.client;
 
 import javafx.scene.image.Image;
 import org.infinityConnection.utils.ConnectionStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.net.ConnectException;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

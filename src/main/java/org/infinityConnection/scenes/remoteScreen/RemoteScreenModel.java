@@ -2,18 +2,15 @@ package org.infinityConnection.scenes.remoteScreen;
 
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
-import org.infinityConnection.client.SendEvents;
+import org.infinityConnection.scenes.client.SendEvents;
 import org.infinityConnection.utils.ConnectionStatus;
-import org.infinityConnection.utils.GUIChangeListener;
-import org.infinityConnection.client.ReceiveScreen;
+import org.infinityConnection.utils.EventsChangeListener;
+import org.infinityConnection.scenes.client.ReceiveScreen;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,7 +26,7 @@ public class RemoteScreenModel {
 
     private boolean stopWasRequested = false;
     private final ExecutorService service = Executors.newCachedThreadPool();
-    private final List<GUIChangeListener> listeners = new ArrayList<>();
+    private final List<EventsChangeListener> listeners = new LinkedList<>();
 
     private ReceiveScreen receiveScreen;
     private SendEvents sendEvents;
@@ -44,8 +41,13 @@ public class RemoteScreenModel {
     }
 
     private void fireGUIChangeEvent() {
-        for (GUIChangeListener listener : listeners) {
+        System.out.format("The loopa %d\n", listeners.size());
+
+        for (EventsChangeListener listener : listeners) {
             listener.onReadingChange();
+            if (listener.isAutoCloasable()) {
+                listeners.remove(listener);
+            }
         }
     }
 
@@ -76,12 +78,8 @@ public class RemoteScreenModel {
         });
     }
 
-    public void addListener(GUIChangeListener listener) {
+    public void addListener(EventsChangeListener listener) {
         listeners.add(listener);
-    }
-
-    public void removeListener(GUIChangeListener listener) {
-        listeners.remove(listener);
     }
 
     public ConnectionStatus getConnectionStatus() {

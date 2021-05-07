@@ -1,8 +1,9 @@
-package org.infinityConnection.server;
+package org.infinityConnection.scenes.server;
 
 import javafx.application.Platform;
 import org.infinityConnection.utils.NotificationsController;
-import org.infinityConnection.client.Verification;
+import org.infinityConnection.scenes.client.Verification;
+import org.infinityConnection.utils.ShutDownable;
 
 import java.awt.*;
 import java.io.*;
@@ -11,11 +12,11 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Objects;
 
-public class ServerThread extends Thread implements Closeable {
+public class ServerThread extends Thread implements Closeable, ShutDownable {
 
     private final Socket socket;
     private final String serverPassword;
-    private final LinkedList<Closeable> threads;
+    private final LinkedList<ShutDownable> clients;
 
     private SendScreen sEvent;
     private ReceiveEvents rEvent;
@@ -37,8 +38,8 @@ public class ServerThread extends Thread implements Closeable {
         }
     }
 
-    public ServerThread(LinkedList<Closeable> threads, Socket socket, String serverPassword) {
-        this.threads = threads;
+    public ServerThread(LinkedList<ShutDownable> clients, Socket socket, String serverPassword) {
+        this.clients = clients;
         this.socket = socket;
         this.serverPassword = serverPassword;
 
@@ -94,6 +95,11 @@ public class ServerThread extends Thread implements Closeable {
 
         interrupt();
 
-        threads.remove(this);
+        clients.remove(this);
+    }
+
+    @Override
+    public void shutDown() {
+
     }
 }

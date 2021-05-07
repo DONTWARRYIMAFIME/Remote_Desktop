@@ -9,9 +9,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.load.LoadSceneController">
+<BorderPane minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #141414;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.load.LoadSceneController">
    <center>
-      <VBox fx:id="pane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #141414;" BorderPane.alignment="CENTER">
+      <VBox fx:id="pane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <Text fill="#ecf0f1" strokeType="OUTSIDE" text="W E L C O M E" textAlignment="CENTER">
                <font>

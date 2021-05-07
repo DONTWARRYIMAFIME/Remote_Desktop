@@ -1,1 +1,15 @@
-.jfx-hamburger StackPane { -fx-background-color: white; }
+.jfx-hamburger StackPane { -fx-background-color: #ecf0f1; }
+
+.toolbarButton {
+    -fx-background-radius: 0px;
+    -fx-background-color: #ecf0f1;
+}
+
+.toolbarButton:hover {
+    -fx-background-color: rgba(26, 204, 217, 0.5);
+
+}
+
+.toolbarButton:selected {
+    -fx-background-color: #1accd9;
+}

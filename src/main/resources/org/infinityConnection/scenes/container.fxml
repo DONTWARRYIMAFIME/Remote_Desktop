@@ -6,11 +6,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.container.ContainerSceneController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #ecf0f1;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.container.ContainerSceneController">
    <top>
       <JFXToolbar fx:id="tbInfo" prefHeight="40.0" style="-fx-background-color: #212528;" BorderPane.alignment="CENTER">
          <center>
@@ -51,6 +52,9 @@
       </JFXToolbar>
    </bottom>
    <left>
-      <JFXDrawer fx:id="drawer" defaultDrawerSize="255.0" prefHeight="520.0" prefWidth="255.0" BorderPane.alignment="CENTER" />
+      <JFXDrawer fx:id="drawer" defaultDrawerSize="255.0" prefHeight="520.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
    </left>
+   <center>
+      <StackPane fx:id="stackPane" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

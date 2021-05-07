@@ -1,35 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToggleNode?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.drawer.DrawerSceneController">
-   <top>
-      <ImageView fitHeight="150.0" fitWidth="255.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <image>
-            <Image url="@../images/infinityblack.png" />
-         </image>
-      </ImageView>
-   </top>
+<BorderPane maxWidth="255.0" minWidth="255.0" prefWidth="255.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.drawer.DrawerSceneController">
    <center>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox prefWidth="255.0" BorderPane.alignment="CENTER">
          <children>
-            <JFXButton fx:id="btnInformation" prefHeight="40.0" prefWidth="255.0" text="I N F O R M A T I O N" />
-            <JFXButton fx:id="btnClient" prefHeight="40.0" prefWidth="255.0" text="C O N N E C T  T O" />
-            <JFXButton fx:id="btnServer" prefHeight="40.0" prefWidth="255.0" text="C O N N E C T I O N  I N F O" />
-            <JFXButton fx:id="btnMembers" prefHeight="40.0" prefWidth="255.0" text="M E M B E R S" />
+            <HBox prefWidth="255.0">
+               <children>
+                  <JFXToggleNode fx:id="btnInformation" alignment="CENTER_LEFT" graphicTextGap="15.0" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="I N F O R M A T I O N">
+                     <selectedColor>
+                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.4399999976158142" />
+                     </selectedColor>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="toolbarButton" />
+                     </toggleGroup>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/information.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXToggleNode>
+                  <Rectangle fill="#f5d058b3" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="toolbarButtonColor" width="15.0" />
+               </children>
+            </HBox>
+            <HBox prefWidth="255.0">
+               <children>
+                  <JFXToggleNode fx:id="btnClient" alignment="CENTER_LEFT" graphicTextGap="15.0" onAction="#onClient" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T  T O" toggleGroup="$toolbarButton">
+                     <selectedColor>
+                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.6000000238418579" />
+                     </selectedColor>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/client.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXToggleNode>
+                  <Rectangle fill="#3be38499" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="toolbarButtonColor" width="15.0" />
+               </children>
+            </HBox>
+            <HBox prefWidth="255.0">
+               <children>
+                  <JFXToggleNode fx:id="btnServer" alignment="CENTER_LEFT" graphicTextGap="21.0" onAction="#onServer" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T I O N  I N F O" toggleGroup="$toolbarButton">
+                     <selectedColor>
+                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.6000000238418579" />
+                     </selectedColor>
+                     <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/server.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXToggleNode>
+                  <Rectangle fill="#2197ff99" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="toolbarButtonColor" width="15.0" />
+               </children>
+            </HBox>
+            <HBox prefWidth="255.0">
+               <children>
+                  <JFXToggleNode fx:id="btnMembers" alignment="CENTER_LEFT" graphicTextGap="15.0" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="M E M B E R S" toggleGroup="$toolbarButton">
+                     <selectedColor>
+                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.6000000238418579" />
+                     </selectedColor>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/members.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXToggleNode>
+                  <Rectangle fill="#9251eda5" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="toolbarButtonColor" width="15.0" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </center>
    <bottom>
-      <JFXButton fx:id="btnExit" onAction="#onExit" prefHeight="40.0" prefWidth="255.0" style="-fx-background-color: #ecf0f1;" text="E X I T" BorderPane.alignment="CENTER">
+      <JFXButton fx:id="btnExit" onAction="#onExit" prefHeight="40.0" prefWidth="255.0" style="-fx-background-radius: 0px; -fx-background-color: #ff5555;" text="E X I T" textFill="#ecf0f1" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
+         <effect>
+            <Glow level="1.0" />
+         </effect>
       </JFXButton>
    </bottom>
+   <top>
+      <BorderPane style="-fx-background-color: #141414;" BorderPane.alignment="CENTER">
+         <center>
+            <ImageView fitHeight="150.0" fitWidth="204.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../images/infinityblack.png" />
+               </image>
+            </ImageView>
+         </center>
+         <padding>
+            <Insets bottom="25.0" left="24.0" right="25.0" top="25.0" />
+         </padding>
+      </BorderPane>
+   </top>
 </BorderPane>

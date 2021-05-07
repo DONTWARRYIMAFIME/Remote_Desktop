@@ -1,4 +1,4 @@
-package org.infinityConnection.server;
+package org.infinityConnection.scenes.server;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

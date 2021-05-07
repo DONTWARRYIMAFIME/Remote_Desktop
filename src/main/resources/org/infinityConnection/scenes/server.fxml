@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="520.0" minWidth="645.0" prefHeight="520.0" prefWidth="645.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.server.ServerSceneController">
+   <center>
+      <BorderPane BorderPane.alignment="CENTER">
+         <right>
+            <BorderPane prefHeight="520.0" prefWidth="320.0" style="-fx-background-color: #589fdf;" BorderPane.alignment="CENTER">
+               <bottom>
+                  <JFXButton fx:id="btnRegenerate" contentDisplay="RIGHT" graphicTextGap="90.0" minWidth="270.0" style="-fx-background-color: #ecf0f1;" text="R E G E N E R A T E" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets bottom="40.0" />
+                     </BorderPane.margin>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/reload.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </bottom>
+               <center>
+                  <VBox alignment="CENTER" spacing="80.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Y O U R  I P" textFill="#ecf0f1">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="tfIP" editable="false" focusColor="#212528" focusTraversable="false" promptText="User's IP" unFocusColor="#212528">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Y O U R  P A S S W O R D" textFill="#ecf0f1">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="tfPassword" editable="false" focusColor="#212528" focusTraversable="false" promptText="User's Password" unFocusColor="#212528">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </center>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </BorderPane>
+         </right>
+         <center>
+            <BorderPane prefWidth="1600.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
+               <center>
+                  <VBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Do you want to share your screen? You on the right tab. Here you can find all the information you need to share your screen right now! On the right side there are your ip address and session password, with their help new users will be able to connect to you" textAlignment="JUSTIFY" textFill="#000000d8" wrapText="true">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </center>
+               <top>
+                  <HBox alignment="CENTER_LEFT" spacing="15.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/iconfinder-technologymachineelectronicdevice29-4026431_113337.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="CONNECTION INFRORMATION" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets top="30.0" />
+                     </BorderPane.margin>
+                  </HBox>
+               </top>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+               <bottom>
+                  <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="DONT FORGET TO TURN ON YOUR SERVER !" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <JFXToggleButton fx:id="toggleButton" onAction="#onToggle" text="S E R V E R  S T A T U S">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXToggleButton>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets bottom="30.0" />
+                     </BorderPane.margin>
+                  </VBox>
+               </bottom>
+            </BorderPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>

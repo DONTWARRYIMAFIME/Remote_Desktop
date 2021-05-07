@@ -15,10 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static javafx.animation.Interpolator.EASE_IN;
+import static javafx.animation.Interpolator.EASE_OUT;
 
 public class SceneController {
     public static Scene scene;
     public static StackPane rootContainer;
+    public static StackPane childContainer;
     private static final Map<String, Pane> parents = new HashMap<>();
     private static final Map<String, FXMLLoader> loaders = new HashMap<>();
 
@@ -31,43 +33,69 @@ public class SceneController {
         }
     }
 
+    public static void setChild(String name, EffectType effect) {
+        changeScene(name, effect, childContainer);
+    }
+
     public static void setRoot(String name, EffectType effect) {
+        changeScene(name, effect, rootContainer);
+    }
+
+    private static void changeScene(String name, EffectType effect, StackPane container) {
         Pane root = getParent(name);
-        root.setMaxWidth(rootContainer.getMaxWidth());
-        root.setMaxHeight(rootContainer.getMaxHeight());
+
+        if (container.getChildren().contains(root)) {
+            return;
+        }
+
+        root.setMaxWidth(container.getMaxWidth());
+        root.setMaxHeight(container.getMaxHeight());
 
         switch (effect) {
             case EASE_IN -> {
                 root.translateXProperty().set(scene.getWidth());
-                horizontal(root);
+                horizontal(root, container);
             }
             case EASE_OUT -> {
                 root.translateXProperty().set(-scene.getWidth());
-                horizontal(root);
+                horizontal(root, container);
+            }
+            case POP_UP -> {
+                root.translateYProperty().set(scene.getHeight());
+                vertical(root, container);
             }
             case NULL -> {
-                rootContainer.getChildren().add(root);
-                removeParent();
+                container.getChildren().add(root);
+                removeParent(container);
             }
         }
-
-
     }
 
-    private static void horizontal(Parent root) {
-        rootContainer.getChildren().add(root);
+    private static void horizontal(Parent root, StackPane container) {
+        container.getChildren().add(root);
 
         Timeline timeline = new Timeline();
         KeyValue kv = new KeyValue(root.translateXProperty(), 0, EASE_IN);
         KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
         timeline.getKeyFrames().add(kf);
-        timeline.setOnFinished((e) -> removeParent());
+        timeline.setOnFinished((e) -> removeParent(container));
         timeline.play();
     }
 
-    private static void removeParent() {
-        if (rootContainer.getChildren().size() > 1) {
-            rootContainer.getChildren().remove(0);
+    private static void vertical(Parent root, StackPane container) {
+        container.getChildren().add(root);
+
+        Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(root.translateYProperty(), 0, EASE_OUT);
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.setOnFinished((e) -> removeParent(container));
+        timeline.play();
+    }
+
+    private static void removeParent(StackPane container) {
+        if (container.getChildren().size() > 1) {
+            container.getChildren().remove(0);
         }
     }
 

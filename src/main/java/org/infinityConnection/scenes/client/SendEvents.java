@@ -1,4 +1,4 @@
-package org.infinityConnection.client;
+package org.infinityConnection.scenes.client;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;

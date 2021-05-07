@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EffectType;
+import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
@@ -41,36 +42,74 @@ public class RemoteScreenController {
     private RemoteScreenModel model;
     private final ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> onResize();
 
-    private void updateConnectionStatus() {
-        connectionStatus = model.getConnectionStatus();
-        if (connectionStatus != ConnectionStatus.CONNECTED) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    private EventsChangeListener updateConnectionStatus() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                connectionStatus = model.getConnectionStatus();
+                if (connectionStatus != ConnectionStatus.CONNECTED) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
+                }
             }
-            Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
-        }
-    }
 
-    private void updateHostName() {
-        Platform.runLater(() -> host.setText(model.getHostName()));
-        model.removeListener(this::updateHostName);
-    }
-
-    private void updateTimer() {
-        Platform.runLater(() -> timer.setText(model.getSessionTime()));
-    }
-
-    private void updateScreen() {
-        Image image = iw.getImage();
-        Platform.runLater(() -> {
-            iw.setImage(model.getReceivedImage());
-            if (image == null) {
-                onResize();
+            @Override
+            public boolean isAutoCloasable() {
+                return false;
             }
-        });
+        };
+    }
 
+    private EventsChangeListener updateHostName() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                Platform.runLater(() -> host.setText(model.getHostName()));
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return true;
+            }
+        };
+    }
+
+    private EventsChangeListener updateTimer() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                Platform.runLater(() -> timer.setText(model.getSessionTime()));
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return false;
+            }
+        };
+    }
+
+    private EventsChangeListener updateScreen() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                Image image = iw.getImage();
+                Platform.runLater(() -> {
+                    iw.setImage(model.getReceivedImage());
+                    if (image == null) {
+                        //onResize();
+                    }
+                });
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return false;
+            }
+        };
     }
 
     private void onResize() {
@@ -85,35 +124,80 @@ public class RemoteScreenController {
             iwWidth = image.getWidth();
             iwHeight = image.getHeight();
 
-            model.addListener(this::onMouseMoved);
+            model.addListener(onMouseMoved());
         } catch (NullPointerException e) {}
     }
 
     //Mouse events
-    private void onMouseMoved() {
-        iw.setOnMouseClicked(model.getMouseMovedEH(iwWidth, iwHeight, iwFitWidth, iwFitHeight));
-        model.removeListener(this::onMousePressed);
+    private EventsChangeListener onMouseMoved() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                iw.setOnMouseClicked(model.getMouseMovedEH(iwWidth, iwHeight, iwFitWidth, iwFitHeight));
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return true;
+            }
+        };
     }
 
-    private void onMousePressed() {
-        iw.setOnMousePressed(model.getMousePressedEH());
-        model.removeListener(this::onMousePressed);
+    private EventsChangeListener onMousePressed() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                iw.setOnMousePressed(model.getMousePressedEH());
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return true;
+            }
+        };
     }
 
-    private void onMouseReleased() {
-        iw.setOnMouseReleased(model.getMouseReleasedEH());
-        model.removeListener(this::onMouseReleased);
+    private EventsChangeListener onMouseReleased() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                iw.setOnMouseReleased(model.getMouseReleasedEH());
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return true;
+            }
+        };
     }
 
     //Keyboard events
-    private void onKeyPressed() {
-        iw.setOnKeyTyped(model.getKeyPressedEH());
-        model.removeListener(this::onKeyPressed);
+    private EventsChangeListener onKeyPressed() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                iw.setOnKeyTyped(model.getKeyPressedEH());
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return true;
+            }
+        };
     }
 
-    private void onKeyReleased() {
-        iw.setOnKeyReleased(model.getKeyReleasedEH());
-        model.removeListener(this::onKeyReleased);
+    private EventsChangeListener onKeyReleased() {
+        return new EventsChangeListener() {
+            @Override
+            public void onReadingChange() {
+                iw.setOnKeyReleased(model.getKeyReleasedEH());
+            }
+
+            @Override
+            public boolean isAutoCloasable() {
+                return true;
+            }
+        };
     }
 
     public void exchangeData(DataInputStream dis, DataOutputStream dos) {
@@ -128,18 +212,20 @@ public class RemoteScreenController {
         stage.widthProperty().addListener(stageSizeListener);
         stage.heightProperty().addListener(stageSizeListener);
 
-        model.addListener(this::updateHostName);
-        model.addListener(this::updateTimer);
-        model.addListener(this::updateScreen);
+        model.addListener(updateConnectionStatus());
+        model.addListener(updateHostName());
+        model.addListener(updateTimer());
+        //model.addListener(updateScreen());
 
-        //Events
-        model.addListener(this::onMousePressed);
-        model.addListener(this::onMouseReleased);
+//
+//        //Events
+//        model.addListener(onMousePressed());
+//        model.addListener(onMouseReleased());
+//
+//        model.addListener(onKeyPressed());
+//        model.addListener(onKeyReleased());
 
-        model.addListener(this::onKeyPressed);
-        model.addListener(this::onKeyReleased);
 
-        model.addListener(this::updateConnectionStatus);
     }
 
     public ConnectionStatus getConnectionStatus() {

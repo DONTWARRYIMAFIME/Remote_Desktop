@@ -1,4 +1,4 @@
-package org.infinityConnection.client;
+package org.infinityConnection.scenes.client;
 
 import java.io.*;
 import java.net.Socket;
