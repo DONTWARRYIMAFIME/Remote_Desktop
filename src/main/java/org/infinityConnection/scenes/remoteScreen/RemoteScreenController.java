@@ -30,9 +30,6 @@ public class RemoteScreenController {
     @FXML
     private JFXToolbar toolbar;
 
-    private double iwWidth;
-    private double iwHeight;
-
     private double iwFitWidth;
     private double iwFitHeight;
 
@@ -94,8 +91,6 @@ public class RemoteScreenController {
 
         iw.setFitWidth(iwFitWidth);
         iw.setFitHeight(iwFitHeight);
-
-        model.addListener(onMouseMoved());
     }
 
     //Mouse events
@@ -103,12 +98,12 @@ public class RemoteScreenController {
         return new EventsChangeListener() {
             @Override
             public void onReadingChange() {
-                iw.setOnMouseClicked(model.getMouseMovedEH(iwWidth, iwHeight, iwFitWidth, iwFitHeight));
+                iw.setOnMouseClicked(model.getMouseMovedEH(iwFitWidth, iwFitHeight));
             }
 
             @Override
             public boolean isAutoCloasable() {
-                return true;
+                return false;
             }
         };
     }
@@ -177,7 +172,6 @@ public class RemoteScreenController {
     public void initialize() {
         stage = (Stage) SceneController.scene.getWindow();
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
-
     }
 
     public void exchangeData(DataInputStream dis, DataOutputStream dos) {
@@ -193,6 +187,7 @@ public class RemoteScreenController {
 
 
         //Events
+        model.addListener(onMouseMoved());
         model.addListener(onMousePressed());
         model.addListener(onMouseReleased());
 

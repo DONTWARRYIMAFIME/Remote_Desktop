@@ -111,8 +111,8 @@ public class RemoteScreenModel {
         return h + " : " + m + " : " + s;
     }
 
-    public EventHandler getMouseMovedEH(double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {
-        return sendEvents.getMouseMovedEH(iwWidth, iwHeight, iwFitWidth, iwFitHeight);
+    public EventHandler getMouseMovedEH(double iwFitWidth, double iwFitHeight) {
+        return sendEvents.getMouseMovedEH(iwFitWidth, iwFitHeight);
     }
 
     public EventHandler getMousePressedEH() {

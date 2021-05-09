@@ -25,7 +25,7 @@ public class SendEvents {
         }
     }
 
-    private void onMouseMove(MouseEvent e, double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {
+    private void onMouseMove(MouseEvent e, double iwFitWidth, double iwFitHeight) {
 
         double realWidth = Math.min(iwFitWidth, iwFitHeight * aspectRatio);
         double realHeight = Math.min(iwFitHeight, iwFitWidth / aspectRatio);
@@ -71,8 +71,8 @@ public class SendEvents {
         this.aspectRatio = ssWidth / ssHeight;
     }
 
-    public EventHandler getMouseMovedEH(double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {
-        return event -> onMouseMove((MouseEvent) event, iwWidth, iwHeight, iwFitWidth, iwFitHeight);
+    public EventHandler getMouseMovedEH(double iwFitWidth, double iwFitHeight) {
+        return event -> onMouseMove((MouseEvent) event, iwFitWidth, iwFitHeight);
     }
 
     public EventHandler getMousePressedEH() {
