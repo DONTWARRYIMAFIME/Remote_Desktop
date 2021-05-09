@@ -33,8 +33,8 @@ public class ConnectSceneController {
     @FXML
     private Circle circle3;
 
-    private ConnectSceneModel model;
-    private ConnectionStatus connectionStatus = ConnectionStatus.UNKNOWN;
+    private ConnectionStatus connectionStatus;
+    private final ConnectSceneModel model = new ConnectSceneModel();
     private final List<Circle> circles = new ArrayList<>();
     private final List<Paint> normalColors = new ArrayList<>();
 
@@ -79,8 +79,6 @@ public class ConnectSceneController {
             @Override
             public void onReadingChange() {
                 connectionStatus = model.getConnectionStatus();
-
-
 
                 if (connectionStatus != ConnectionStatus.CONNECTING) {
                     updateLabel();
@@ -134,19 +132,19 @@ public class ConnectSceneController {
         setRotation(circle1, true, 360, 10);
         setRotation(circle2, true, 180, 18);
         setRotation(circle3, true, 145, 24);
+
+        Stage stage = (Stage) SceneController.scene.getWindow();
+        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
     }
 
     public void establishConnection(String ip, int port, String password) {
-        connectionStatus = ConnectionStatus.UNKNOWN;
+        connectionStatus = ConnectionStatus.CONNECTING;
 
         setNormalColors();
         status.setText(ConnectionStatus.CONNECTING.getStatusName());
 
-        model = new ConnectSceneModel(ip, port, password);
         model.addListener(updateConnectionStatus());
-
-        Stage stage = (Stage) SceneController.scene.getWindow();
-        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
+        model.start(ip, port, password);
     }
 
 }

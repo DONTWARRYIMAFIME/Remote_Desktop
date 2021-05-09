@@ -3,10 +3,11 @@ package org.infinityConnection.scenes.remoteScreen;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.infinityConnection.scenes.client.SendEvents;
-import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.scenes.client.ReceiveScreen;
+import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,20 +18,20 @@ import java.util.concurrent.Executors;
 
 public class RemoteScreenModel {
 
-    private final DataInputStream dis;
-    private final DataOutputStream dos;
+    private DataInputStream dis;
+    private DataOutputStream dos;
 
     private String hostName = "Undefined";
 
-    private final Timer timer = new Timer();
+    private Timer timer;
     private int seconds = 0;
 
     private boolean stopWasRequested = false;
-    private final ExecutorService service = Executors.newCachedThreadPool();
+    private ExecutorService service = Executors.newCachedThreadPool();
     private final List<EventsChangeListener> listeners = new ArrayList<>();
 
-    private ReceiveScreen receiveScreen;
-    private SendEvents sendEvents;
+    private final ReceiveScreen receiveScreen = new ReceiveScreen();
+    private final SendEvents sendEvents = new SendEvents();
 
     private TimerTask getTask() {
         return new TimerTask() {
@@ -44,6 +45,11 @@ public class RemoteScreenModel {
     private void fireGUIChangeEvent() {
         for (EventsChangeListener listener : listeners) {
             listener.onReadingChange();
+        }
+    }
+
+    private void removeAutoClosableEvents() {
+        for (EventsChangeListener listener : listeners) {
             if (listener.isAutoCloasable()) {
                 Platform.runLater(() -> listeners.remove(listener));
             }
@@ -51,13 +57,19 @@ public class RemoteScreenModel {
     }
 
     public void removeListeners() {
-        fireGUIChangeEvent();
         listeners.clear();
     }
 
-    public RemoteScreenModel(DataInputStream dis, DataOutputStream dos) {
+    public void start(DataInputStream dis, DataOutputStream dos) {
         this.dis = dis;
         this.dos = dos;
+
+        stopWasRequested = false;
+        service = Executors.newCachedThreadPool();
+
+        hostName = "Undefined";
+        timer = new Timer();
+        seconds = 0;
 
         service.submit(() -> {
             try {
@@ -66,14 +78,15 @@ public class RemoteScreenModel {
 
                 hostName = dis.readUTF();
 
-                receiveScreen = new ReceiveScreen(dis);
-                sendEvents = new SendEvents(dos, ssWidth, ssHeight);
+                receiveScreen.start(dis);
+                sendEvents.setComponents(dos, ssWidth, ssHeight);
 
                 timer.scheduleAtFixedRate(getTask(), 1000, 1000);
 
                 while (!stopWasRequested) {
                     Thread.sleep(40);
                     fireGUIChangeEvent();
+                    removeAutoClosableEvents();
                 }
 
             } catch (IOException | InterruptedException e) {
@@ -84,10 +97,6 @@ public class RemoteScreenModel {
 
     public void addListener(EventsChangeListener listener) {
         listeners.add(listener);
-    }
-
-    public ConnectionStatus getConnectionStatus() {
-        return receiveScreen.getConnectionStatus();
     }
 
     public String getHostName() {
@@ -126,13 +135,26 @@ public class RemoteScreenModel {
         return receiveScreen.getReceivedImage();
     }
 
+    public boolean isStopped() {
+        return receiveScreen.isStopped();
+    }
+
     public void shutDown() {
         stopWasRequested = true;
-        timer.cancel();
+        removeListeners();
+
+        if (timer != null) {
+            timer.cancel();
+        }
 
         try {
-            dis.close();
-            dos.close();
+            if (dis != null) {
+                dis.close();
+            }
+
+            if (dos != null) {
+                dos.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

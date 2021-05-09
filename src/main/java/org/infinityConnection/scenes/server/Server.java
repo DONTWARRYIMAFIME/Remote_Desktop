@@ -32,8 +32,6 @@ public class Server {
     }
 
     private void fireChangeEvent() {
-        System.out.println("Listeners : " + listeners.size());
-
         for (EventsChangeListener listener : listeners) {
             listener.onReadingChange();
             if (listener.isAutoCloasable()) {
@@ -146,7 +144,9 @@ public class Server {
         shutDownClients();
 
         try {
-            serverSocket.close();
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

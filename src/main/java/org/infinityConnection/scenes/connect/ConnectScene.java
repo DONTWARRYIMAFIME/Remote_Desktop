@@ -1,20 +1,19 @@
 package org.infinityConnection.scenes.connect;
 
 import javafx.fxml.FXMLLoader;
-import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.SceneController;
 
 public class ConnectScene {
 
-    public ConnectScene(String ip, int port, String password) {
+    private final ConnectSceneController controller;
 
+    public ConnectScene() {
         FXMLLoader loader = SceneController.getFXMLLoader("connectScene");
-        ConnectSceneController controller = loader.getController();
+        controller = loader.getController();
+    }
 
-        SceneController.setRoot("connectScene", EffectType.EASE_IN);
-
+    public void establishConnection(String ip, int port, String password) {
         controller.establishConnection(ip, port, password);
-
     }
 
 }

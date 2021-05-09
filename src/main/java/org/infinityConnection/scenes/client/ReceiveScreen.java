@@ -1,7 +1,6 @@
 package org.infinityConnection.scenes.client;
 
 import javafx.scene.image.Image;
-import org.infinityConnection.utils.ConnectionStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -11,11 +10,10 @@ import java.util.concurrent.Executors;
 
 public class ReceiveScreen {
 
-    private ConnectionStatus connectionStatus = ConnectionStatus.CONNECTED;
     private DataInputStream dis;
 
     private boolean stopWasRequested = false;
-    private final ExecutorService service = Executors.newCachedThreadPool();
+    private ExecutorService service= Executors.newCachedThreadPool();
 
     private Image image;
 
@@ -38,27 +36,29 @@ public class ReceiveScreen {
         }
     }
 
-    public ReceiveScreen(DataInputStream dis) {
-        this. dis = dis;
+    public void start(DataInputStream dis) {
+        this.dis = dis;
+
+        stopWasRequested = false;
+        service = Executors.newCachedThreadPool();
 
         service.submit(() -> {
-            while(!stopWasRequested) {
+            while (!stopWasRequested) {
                 updateImage();
             }
         });
-    }
-
-    public ConnectionStatus getConnectionStatus() {
-        return connectionStatus;
     }
 
     public Image getReceivedImage() {
         return image;
     }
 
+    public boolean isStopped() {
+        return stopWasRequested;
+    }
+
     public void shutDown() {
         stopWasRequested = true;
-        connectionStatus = ConnectionStatus.DROPPED_CONNECTION;
         service.shutdown();
     }
 

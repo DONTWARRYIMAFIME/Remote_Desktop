@@ -10,7 +10,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.infinityConnection.utils.ConnectionStatus;
-import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.utils.SceneController;
 
@@ -37,29 +36,9 @@ public class RemoteScreenController {
     private double iwFitWidth;
     private double iwFitHeight;
 
-    private ConnectionStatus connectionStatus = ConnectionStatus.CONNECTED;
-
     private Stage stage;
-    private RemoteScreenModel model;
+    private final RemoteScreenModel model = new RemoteScreenModel();
     private final ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> onResize();
-
-    private EventsChangeListener updateConnectionStatus() {
-        return new EventsChangeListener() {
-            @Override
-            public void onReadingChange() {
-                connectionStatus = model.getConnectionStatus();
-                if (connectionStatus != ConnectionStatus.CONNECTED) {
-                    onDisconnect();
-                    Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
-                }
-            }
-
-            @Override
-            public boolean isAutoCloasable() {
-                return false;
-            }
-        };
-    }
 
     private EventsChangeListener updateHostName() {
         return new EventsChangeListener() {
@@ -110,19 +89,13 @@ public class RemoteScreenController {
     }
 
     private void onResize() {
-        try {
-            iwFitWidth = iw.getScene().getWidth();
-            iwFitHeight = iw.getScene().getHeight() - toolbar.getHeight();
+        iwFitWidth = SceneController.scene.getWidth();
+        iwFitHeight = SceneController.scene.getHeight() - toolbar.getHeight();
 
-            iw.setFitWidth(iwFitWidth);
-            iw.setFitHeight(iwFitHeight);
+        iw.setFitWidth(iwFitWidth);
+        iw.setFitHeight(iwFitHeight);
 
-            Image image = iw.getImage();
-            iwWidth = image.getWidth();
-            iwHeight = image.getHeight();
-
-            model.addListener(onMouseMoved());
-        } catch (NullPointerException e) {}
+        model.addListener(onMouseMoved());
     }
 
     //Mouse events
@@ -201,17 +174,19 @@ public class RemoteScreenController {
         model.shutDown();
     }
 
-    public void exchangeData(DataInputStream dis, DataOutputStream dos) {
-        iw.setImage(null);
-        model = new RemoteScreenModel(dis, dos);
-
+    public void initialize() {
         stage = (Stage) SceneController.scene.getWindow();
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
 
-        stage.widthProperty().addListener(stageSizeListener);
-        stage.heightProperty().addListener(stageSizeListener);
+    }
 
-        model.addListener(updateConnectionStatus());
+    public void exchangeData(DataInputStream dis, DataOutputStream dos) {
+        iw.setImage(null);
+        model.start(dis, dos);
+
+        SceneController.scene.widthProperty().addListener(stageSizeListener);
+        SceneController.scene.heightProperty().addListener(stageSizeListener);
+
         model.addListener(updateHostName());
         model.addListener(updateTimer());
         model.addListener(updateScreen());
@@ -224,18 +199,20 @@ public class RemoteScreenController {
         model.addListener(onKeyPressed());
         model.addListener(onKeyReleased());
 
-        Platform.runLater(() -> iw.requestFocus() );
+        Platform.runLater(() -> {
+            iw.requestFocus();
+            onResize();
+        });
     }
 
-    public ConnectionStatus getConnectionStatus() {
-        return connectionStatus;
+    public boolean isStopped() {
+        return model.isStopped();
     }
 
     public void onDisconnect() {
-        stage.widthProperty().removeListener(stageSizeListener);
-        stage.heightProperty().removeListener(stageSizeListener);
+        SceneController.scene.widthProperty().removeListener(stageSizeListener);
+        SceneController.scene.heightProperty().removeListener(stageSizeListener);
 
         model.shutDown();
-        Platform.runLater(() -> model.removeListeners());
     }
 }

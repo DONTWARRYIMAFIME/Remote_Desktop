@@ -64,6 +64,10 @@ public class SceneController {
                 root.translateYProperty().set(scene.getHeight());
                 vertical(root, container);
             }
+            case POP_DOWN -> {
+                root.translateYProperty().set(-scene.getHeight());
+                vertical(root, container);
+            }
             case NULL -> {
                 container.getChildren().add(root);
                 removeParent(container);
@@ -86,7 +90,7 @@ public class SceneController {
         container.getChildren().add(root);
 
         Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(root.translateYProperty(), 0, EASE_OUT);
+        KeyValue kv = new KeyValue(root.translateYProperty(), 0, EASE_IN);
         KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
         timeline.getKeyFrames().add(kf);
         timeline.setOnFinished((e) -> removeParent(container));

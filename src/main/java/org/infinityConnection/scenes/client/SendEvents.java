@@ -11,9 +11,10 @@ import java.io.PrintWriter;
 
 public class SendEvents {
 
-    private final double ssWidth;
-    private final double ssHeight;
-    private final PrintWriter printWriter;
+    private double ssWidth;
+    private double ssHeight;
+    private double aspectRatio;
+    private PrintWriter printWriter;
 
     private int convertMouseButton(MouseButton mouseButton) {
         switch (mouseButton) {
@@ -26,7 +27,6 @@ public class SendEvents {
 
     private void onMouseMove(MouseEvent e, double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {
 
-        double aspectRatio = iwWidth / iwHeight;
         double realWidth = Math.min(iwFitWidth, iwFitHeight * aspectRatio);
         double realHeight = Math.min(iwFitHeight, iwFitWidth / aspectRatio);
 
@@ -63,17 +63,12 @@ public class SendEvents {
 //        printWriter.flush();
     }
 
-    public SendEvents(DataOutputStream dos, double ssWidth, double ssHeight) {
+    public void setComponents(DataOutputStream dos, double ssWidth, double ssHeight) {
         this.printWriter = new PrintWriter(dos);
         this.ssWidth = ssWidth;
         this.ssHeight = ssHeight;
-//        iw.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onMouseMove);
-//        iw.addEventHandler(MouseEvent.MOUSE_PRESSED, this::onMousePressed);
-//        iw.addEventHandler(MouseEvent.MOUSE_RELEASED, this::onMouseReleased);
-//        iw.addEventHandler(KeyEvent.KEY_PRESSED, this::onKeyPressed);
-//        iw.addEventHandler(KeyEvent.KEY_RELEASED, this::onKeyReleased);
-//
-//        Platform.runLater(() -> iw.requestFocus());
+
+        this.aspectRatio = ssWidth / ssHeight;
     }
 
     public EventHandler getMouseMovedEH(double iwWidth, double iwHeight, double iwFitWidth, double iwFitHeight) {

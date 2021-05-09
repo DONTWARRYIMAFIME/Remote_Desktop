@@ -57,9 +57,6 @@ public class ServerSceneController {
     }
 
     private void turnOnServer() {
-        stage = (Stage) SceneController.scene.getWindow();
-        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
-
         server.addListener(updateClientsNotifications());
         server.start();
     }
@@ -67,6 +64,9 @@ public class ServerSceneController {
     public void initialize() {
         tfIP.setText(server.getIP());
         tfPassword.setText(server.getServerPassword());
+
+        stage = (Stage) SceneController.scene.getWindow();
+        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
     }
 
     public void onToggle() {

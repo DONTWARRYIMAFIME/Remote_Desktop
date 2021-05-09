@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.scenes.client.Verification;
 import org.infinityConnection.scenes.client.Authentication;
+import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.scenes.remoteScreen.RemoteScreen;
+import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -19,12 +21,16 @@ import java.util.concurrent.Executors;
 
 public class ConnectSceneModel {
 
-    private ConnectionStatus connectionStatus = ConnectionStatus.UNKNOWN;
-    private RemoteScreen remoteScreen;
+    private Socket socket;
+    private DataInputStream dis;
+    private DataOutputStream dos;
+
+    private ConnectionStatus connectionStatus;
+    private RemoteScreen remoteScreen = new RemoteScreen();
 
     private boolean stopWasRequested = false;
-    private final ExecutorService service = Executors.newCachedThreadPool();
-    private final ExecutorService listener = Executors.newCachedThreadPool();
+    private ExecutorService service = Executors.newCachedThreadPool();
+    private ExecutorService listener = Executors.newCachedThreadPool();
     private final List<EventsChangeListener> listeners = new ArrayList<>();
 
     private void fireGUIChangeEvent() {
@@ -40,16 +46,19 @@ public class ConnectSceneModel {
         listeners.clear();
     }
 
-    public ConnectSceneModel(String ip, int port, String password) {
+    public void start(String ip, int port, String password) {
+        service = Executors.newCachedThreadPool();
+        listener = Executors.newCachedThreadPool();
+
+        stopWasRequested = false;
+        connectionStatus = ConnectionStatus.CONNECTING;
 
         service.submit(() -> {
             try {
-                connectionStatus = ConnectionStatus.CONNECTING;
+                socket = new Socket(ip, port);
 
-                Socket socket = new Socket(ip, port);
-
-                DataInputStream dis = new DataInputStream(socket.getInputStream());
-                DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+                dis = new DataInputStream(socket.getInputStream());
+                dos = new DataOutputStream(socket.getOutputStream());
 
                 Authentication authentication = new Authentication(dis, dos, password);
 
@@ -57,11 +66,9 @@ public class ConnectSceneModel {
                     connectionStatus = ConnectionStatus.WRONG_PASSWORD;
                 } else {
                     connectionStatus = ConnectionStatus.CONNECTED;
+                    remoteScreen.exchangeData(dis, dos);
                     Thread.sleep(2000);
-                    Platform.runLater(() -> {
-
-                        remoteScreen.exchangeData(dis, dos);
-                    });
+                    Platform.runLater(() -> SceneController.setRoot("remoteScreen", EffectType.EASE_IN));
                 }
 
             } catch (UnknownHostException e) {
@@ -75,16 +82,19 @@ public class ConnectSceneModel {
             while (!stopWasRequested) {
                 try {
                     Thread.sleep(1000);
+
+                    if (connectionStatus == ConnectionStatus.CONNECTED && remoteScreen.isStopped()) {
+                        Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
+                        connectionStatus = ConnectionStatus.DROPPED_CONNECTION;
+                        remoteScreen.shutDown();
+                    }
+
+                    fireGUIChangeEvent();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                fireGUIChangeEvent();
-                if (remoteScreen != null) {
-                    connectionStatus = remoteScreen.getConnectionStatus();
-                }
             }
         });
-
     }
 
     public void addListener(EventsChangeListener listener) {
@@ -98,6 +108,23 @@ public class ConnectSceneModel {
     public void shutDown() {
         stopWasRequested = true;
         removeListeners();
+
+//        try {
+//            if (socket != null) {
+//                socket.close();
+//            }
+//
+//            if (dis != null) {
+//                dis.close();
+//            }
+//
+//            if (dos != null) {
+//                dos.close();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         listener.shutdown();
         service.shutdown();
     }

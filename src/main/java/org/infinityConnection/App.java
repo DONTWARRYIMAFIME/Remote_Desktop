@@ -15,23 +15,23 @@ public class App extends Application {
         stage.setTitle(title);
         stage.getIcons().add(Loader.loadImage("images/icon.png"));
 
-        SceneController.addScene("loadScene", Loader.loadFXML("scenes/load"));
-        SceneController.addScene("clientScene", Loader.loadFXML("scenes/client"));
-        SceneController.addScene("drawerScene", Loader.loadFXML("scenes/drawer"));
-        SceneController.addScene("containerScene", Loader.loadFXML("scenes/container"));
-        SceneController.addScene("serverScene", Loader.loadFXML("scenes/server"));
-        SceneController.addScene("connectScene", Loader.loadFXML("scenes/connect"));
-        SceneController.addScene("remoteScreen", Loader.loadFXML("scenes/remoteScreen"));
-
         StackPane stackPane = new StackPane();
         Scene scene = new Scene(stackPane);
         stage.setScene(scene);
         SceneController.scene = scene;
         SceneController.rootContainer = (StackPane) scene.getRoot();
+
+        SceneController.addScene("loadScene", Loader.loadFXML("scenes/load"));
+        SceneController.addScene("remoteScreen", Loader.loadFXML("scenes/remoteScreen"));
+        SceneController.addScene("connectScene", Loader.loadFXML("scenes/connect"));
+        SceneController.addScene("clientScene", Loader.loadFXML("scenes/client"));
+        SceneController.addScene("drawerScene", Loader.loadFXML("scenes/drawer"));
+        SceneController.addScene("containerScene", Loader.loadFXML("scenes/container"));
+        SceneController.addScene("serverScene", Loader.loadFXML("scenes/server"));
+
         SceneController.childContainer = (StackPane) SceneController.getParent("containerScene").getChildren().get(3);
 
         SceneController.setRoot("loadScene", EffectType.NULL);
-        //SceneController.setChild("mainScene", EffectType.EASE_IN);
 
         stage.show();
 
