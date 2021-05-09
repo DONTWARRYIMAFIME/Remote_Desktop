@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EffectType;
@@ -78,6 +80,8 @@ public class ConnectSceneController {
             public void onReadingChange() {
                 connectionStatus = model.getConnectionStatus();
 
+
+
                 if (connectionStatus != ConnectionStatus.CONNECTING) {
                     updateLabel();
                     if (connectionStatus == ConnectionStatus.CONNECTED) {
@@ -116,6 +120,10 @@ public class ConnectSceneController {
         }
     }
 
+    private void closeWindowEvent(WindowEvent event) {
+        model.shutDown();
+    }
+
     public void initialize() {
         circles.add(circle1);
         circles.add(circle2);
@@ -129,11 +137,16 @@ public class ConnectSceneController {
     }
 
     public void establishConnection(String ip, int port, String password) {
+        connectionStatus = ConnectionStatus.UNKNOWN;
+
         setNormalColors();
         status.setText(ConnectionStatus.CONNECTING.getStatusName());
 
         model = new ConnectSceneModel(ip, port, password);
         model.addListener(updateConnectionStatus());
+
+        Stage stage = (Stage) SceneController.scene.getWindow();
+        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
     }
 
 }

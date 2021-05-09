@@ -31,9 +31,13 @@ public class ConnectSceneModel {
         for (EventsChangeListener listener : listeners) {
             listener.onReadingChange();
             if (listener.isAutoCloasable()) {
-                listeners.remove(listener);
+                Platform.runLater(() -> listeners.remove(listener));
             }
         }
+    }
+
+    public void removeListeners() {
+        listeners.clear();
     }
 
     public ConnectSceneModel(String ip, int port, String password) {
@@ -55,7 +59,7 @@ public class ConnectSceneModel {
                     connectionStatus = ConnectionStatus.CONNECTED;
                     Thread.sleep(2000);
                     Platform.runLater(() -> {
-                        remoteScreen = new RemoteScreen();
+
                         remoteScreen.exchangeData(dis, dos);
                     });
                 }
@@ -93,6 +97,7 @@ public class ConnectSceneModel {
 
     public void shutDown() {
         stopWasRequested = true;
+        removeListeners();
         listener.shutdown();
         service.shutdown();
     }

@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.infinityConnection.utils.ConnectionStatus;
 import org.infinityConnection.utils.EffectType;
 import org.infinityConnection.utils.EventsChangeListener;
@@ -48,11 +49,7 @@ public class RemoteScreenController {
             public void onReadingChange() {
                 connectionStatus = model.getConnectionStatus();
                 if (connectionStatus != ConnectionStatus.CONNECTED) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    onDisconnect();
                     Platform.runLater(() -> SceneController.setRoot("connectScene", EffectType.EASE_OUT));
                 }
             }
@@ -100,7 +97,7 @@ public class RemoteScreenController {
                 Platform.runLater(() -> {
                     iw.setImage(model.getReceivedImage());
                     if (image == null) {
-                        //onResize();
+                        onResize();
                     }
                 });
             }
@@ -200,14 +197,16 @@ public class RemoteScreenController {
         };
     }
 
+    private void closeWindowEvent(WindowEvent event) {
+        model.shutDown();
+    }
+
     public void exchangeData(DataInputStream dis, DataOutputStream dos) {
-
-        Platform.runLater(() -> iw.requestFocus() );
-
+        iw.setImage(null);
         model = new RemoteScreenModel(dis, dos);
 
         stage = (Stage) SceneController.scene.getWindow();
-        stage.setOnCloseRequest((e) -> model.shutDown());
+        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
 
         stage.widthProperty().addListener(stageSizeListener);
         stage.heightProperty().addListener(stageSizeListener);
@@ -215,17 +214,17 @@ public class RemoteScreenController {
         model.addListener(updateConnectionStatus());
         model.addListener(updateHostName());
         model.addListener(updateTimer());
-        //model.addListener(updateScreen());
-
-//
-//        //Events
-//        model.addListener(onMousePressed());
-//        model.addListener(onMouseReleased());
-//
-//        model.addListener(onKeyPressed());
-//        model.addListener(onKeyReleased());
+        model.addListener(updateScreen());
 
 
+        //Events
+        model.addListener(onMousePressed());
+        model.addListener(onMouseReleased());
+
+        model.addListener(onKeyPressed());
+        model.addListener(onKeyReleased());
+
+        Platform.runLater(() -> iw.requestFocus() );
     }
 
     public ConnectionStatus getConnectionStatus() {
@@ -233,11 +232,10 @@ public class RemoteScreenController {
     }
 
     public void onDisconnect() {
-        iw.setImage(null);
-
         stage.widthProperty().removeListener(stageSizeListener);
         stage.heightProperty().removeListener(stageSizeListener);
 
         model.shutDown();
+        Platform.runLater(() -> model.removeListeners());
     }
 }

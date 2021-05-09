@@ -1,22 +1,21 @@
 package org.infinityConnection.scenes.server;
 
-import javafx.application.Platform;
-import org.infinityConnection.utils.NotificationsController;
 import org.infinityConnection.scenes.client.Verification;
-import org.infinityConnection.utils.ShutDownable;
 
 import java.awt.*;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.LinkedList;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class ServerThread extends Thread implements Closeable, ShutDownable {
+public class ServerThread {
 
     private final Socket socket;
     private final String serverPassword;
-    private final LinkedList<ShutDownable> clients;
 
     private SendScreen sEvent;
     private ReceiveEvents rEvent;
@@ -24,31 +23,25 @@ public class ServerThread extends Thread implements Closeable, ShutDownable {
     private DataInputStream dis;
     private DataOutputStream dos;
 
-    private void checkConnection() throws IOException {
+    private boolean stopWasRequested = false;
+    private final ExecutorService service = Executors.newCachedThreadPool();
 
-        while (true) {
-            if (!sEvent.isInterrupted() && !rEvent.isInterrupted()) {
-                continue;
-            }
-//            if (!sEvent.isInterrupted()) {
-//                continue;
-//            }
-            close();
-            break;
+    private void checkConnection() {
+        if (sEvent.isStopped() || rEvent.isStopped()) {
+            shutDown();
         }
     }
 
-    public ServerThread(LinkedList<ShutDownable> clients, Socket socket, String serverPassword) {
-        this.clients = clients;
+    public ServerThread(Socket socket, String serverPassword) {
         this.socket = socket;
         this.serverPassword = serverPassword;
 
-        setDaemon(true);
-        start();
+        service.submit(() -> {
+           start();
+        });
     }
 
-    @Override
-    public void run() {
+    private void start() {
 
         try {
             dis = new DataInputStream(socket.getInputStream());
@@ -72,34 +65,39 @@ public class ServerThread extends Thread implements Closeable, ShutDownable {
                 sEvent = new SendScreen(dos, robot, rectangle);
                 rEvent = new ReceiveEvents(dis, robot);
 
-                checkConnection();
+                while (!stopWasRequested) {
+                    checkConnection();
+                    Thread.sleep(1000);
+                }
 
             } else {
                 dos.writeUTF(Verification.INCORRECT.toString());
-                close();
+                shutDown();
             }
-        } catch (IOException | AWTException e) {
+        } catch (IOException | AWTException | InterruptedException e) {
             e.printStackTrace();
+            shutDown();
         }
 
-
     }
 
-    @Override
-    public void close() throws IOException {
-        System.out.println("Client disconnected");
-        Platform.runLater(NotificationsController::showUserDisconnected);
-
-        dis.close();
-        dos.close();
-
-        interrupt();
-
-        clients.remove(this);
+    public boolean isStopped() {
+        return stopWasRequested;
     }
 
-    @Override
+
     public void shutDown() {
+        stopWasRequested = true;
 
+        if (!sEvent.isStopped()) {
+            sEvent.shutDown();
+        }
+
+        if (!rEvent.isStopped()) {
+            rEvent.shutDown();
+        }
+
+        service.shutdown();
+        System.out.println("Client disconnected");
     }
 }

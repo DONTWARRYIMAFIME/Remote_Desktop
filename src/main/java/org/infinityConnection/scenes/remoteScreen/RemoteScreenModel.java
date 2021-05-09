@@ -1,5 +1,6 @@
 package org.infinityConnection.scenes.remoteScreen;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import org.infinityConnection.scenes.client.SendEvents;
@@ -26,7 +27,7 @@ public class RemoteScreenModel {
 
     private boolean stopWasRequested = false;
     private final ExecutorService service = Executors.newCachedThreadPool();
-    private final List<EventsChangeListener> listeners = new LinkedList<>();
+    private final List<EventsChangeListener> listeners = new ArrayList<>();
 
     private ReceiveScreen receiveScreen;
     private SendEvents sendEvents;
@@ -41,14 +42,17 @@ public class RemoteScreenModel {
     }
 
     private void fireGUIChangeEvent() {
-        System.out.format("The loopa %d\n", listeners.size());
-
         for (EventsChangeListener listener : listeners) {
             listener.onReadingChange();
             if (listener.isAutoCloasable()) {
-                listeners.remove(listener);
+                Platform.runLater(() -> listeners.remove(listener));
             }
         }
+    }
+
+    public void removeListeners() {
+        fireGUIChangeEvent();
+        listeners.clear();
     }
 
     public RemoteScreenModel(DataInputStream dis, DataOutputStream dos) {
@@ -124,7 +128,6 @@ public class RemoteScreenModel {
 
     public void shutDown() {
         stopWasRequested = true;
-
         timer.cancel();
 
         try {

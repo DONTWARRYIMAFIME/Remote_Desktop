@@ -1,7 +1,7 @@
 package org.infinityConnection.scenes.server;
 
+import javafx.application.Platform;
 import org.infinityConnection.utils.EventsChangeListener;
-import org.infinityConnection.utils.ShutDownable;
 
 import java.io.*;
 import java.net.*;
@@ -12,42 +12,57 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server implements ShutDownable {
+public class Server {
 
     private int port;
     private final String serverPassword;
     private final int maxUsers = 10;
 
-    private ServerSocket socket;
-    private final ExecutorService service = Executors.newCachedThreadPool();
+    private ServerSocket serverSocket;
+    private ExecutorService serverService = Executors.newCachedThreadPool();
+    private ExecutorService listenerService = Executors.newCachedThreadPool();
+
     private boolean stopWasRequested = false;
     private final List<EventsChangeListener> listeners = new ArrayList<>();
 
-    private final LinkedList<ShutDownable> clients = new LinkedList<>();
+    private final LinkedList<ServerThread> clients = new LinkedList<>();
 
     private String generatePassword() {
         return "1111";
     }
 
     private void fireChangeEvent() {
+        System.out.println("Listeners : " + listeners.size());
+
         for (EventsChangeListener listener : listeners) {
             listener.onReadingChange();
             if (listener.isAutoCloasable()) {
-                listeners.remove(listener);
+                Platform.runLater(() -> listeners.remove(listener));
             }
         }
     }
 
+    private void removeListeners() {
+        listeners.clear();
+    }
+
     private void shutDownClients() {
-        for (ShutDownable client : clients) {
+        for (ServerThread client : clients) {
             client.shutDown();
+        }
+    }
+
+    private void interviewClients() {
+        for (ServerThread client : clients) {
+            if (client.isStopped()) {
+                clients.remove(client);
+            }
         }
     }
 
     public Server() {
         this.port = 8001;
         this.serverPassword = generatePassword();
-
     }
 
     public Server(int port) {
@@ -93,39 +108,51 @@ public class Server implements ShutDownable {
         listeners.add(listener);
     }
 
-    public void removeListener(EventsChangeListener listener) {
-        listeners.remove(listener);
-    }
-
     public void start() {
         stopWasRequested = false;
-        service.submit(() -> {
-            try {
-                socket = new ServerSocket(port, maxUsers);
+        serverService = Executors.newCachedThreadPool();
+        listenerService = Executors.newCachedThreadPool();
 
+        serverService.submit(() -> {
+            try {
+                serverSocket = new ServerSocket(port, maxUsers);
                 while (!stopWasRequested) {
-                    Thread.sleep(1000);
-                    clients.add(new ServerThread(clients, socket.accept(), serverPassword));
-                    fireChangeEvent();
+                    clients.add(new ServerThread(serverSocket.accept(), serverPassword));
                 }
-            } catch (IOException | InterruptedException e) {
+            }catch (SocketException e) {
+                System.out.println("Socket closed");
+            } catch (IOException e) {
                 e.printStackTrace();
+            }
+        });
+
+        listenerService.submit(() -> {
+            while (!stopWasRequested) {
+                fireChangeEvent();
+                interviewClients();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    @Override
     public void shutDown() {
         stopWasRequested = true;
+        removeListeners();
+
+        shutDownClients();
 
         try {
-            socket.close();
-        } catch (IOException e) {
+            serverSocket.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        shutDownClients();
-        service.shutdown();
+        listenerService.shutdown();
+        serverService.shutdown();
     }
 
 }
