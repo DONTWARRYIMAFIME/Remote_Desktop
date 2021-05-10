@@ -32,6 +32,8 @@ public class ContainerSceneController {
 
     public void initialize() {
         drawer.setSidePane(SceneController.getParent("drawerScene"));
+        drawer.setOnDrawerOpening((e) -> drawer.setMinWidth(drawer.getDefaultDrawerSize()));
+        drawer.setOnDrawerClosed((e) -> drawer.setMinWidth(0));
         setHamburgerAction();
     }
 

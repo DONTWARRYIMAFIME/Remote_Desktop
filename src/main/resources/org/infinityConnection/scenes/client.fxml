@@ -4,53 +4,94 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane cache="true" cacheHint="SPEED" depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="520.0" minWidth="645.0" pickOnBounds="false" prefHeight="520.0" prefWidth="645.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.client.ClientSceneController">
    <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/remote_desktop_icon_137254.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="MAKE REMOTE  DESKTOP  CONNECTION" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" />
+                     </padding>
+                  </HBox>
+                  <Label text="Label" />
+                  <Label text="Label" />
+               </children>
+            </VBox>
+         </center></BorderPane>
    </center>
    <right>
-      <BorderPane style="-fx-background-color: #9bdfa4;" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="520.0" prefWidth="320.0" style="-fx-background-color: #7fdf9f;" BorderPane.alignment="CENTER">
          <center>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="80.0" BorderPane.alignment="CENTER">
                <children>
                   <VBox spacing="5.0">
                      <children>
-                        <Label text="I P" textFill="#ecf0f1">
+                        <Label text="S E R V E R  I P" textFill="#ecf0f1">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="tfIP" promptText="xxx.xxx.xxx.xxx">
+                        <JFXTextField fx:id="tfIP" focusColor="#212528" promptText="xxx.xxx.xxx.xxx">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="System Italic" size="15.0" />
                            </font>
                         </JFXTextField>
                      </children>
                   </VBox>
                   <VBox>
                      <children>
-                        <Label text="P A S S W O R D" textFill="#ecf0f1">
+                        <Label text="S E R V E R  P A S S..." textFill="#ecf0f1">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font></Label>
-                        <JFXTextField fx:id="tfPassword" promptText="********" />
+                        <JFXTextField fx:id="tfPassword" focusColor="#212528" promptText="********">
+                           <font>
+                              <Font name="System Italic" size="15.0" />
+                           </font></JFXTextField>
                      </children>
                   </VBox>
                </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
             </VBox>
          </center>
          <bottom>
-            <JFXButton contentDisplay="RIGHT" minWidth="270.0" onAction="#onConnect" style="-fx-background-color: #ecf0f1;" text="C O N N E C T" BorderPane.alignment="CENTER">
+            <JFXButton contentDisplay="RIGHT" graphicTextGap="150.0" minWidth="270.0" onAction="#onConnect" style="-fx-background-color: #ecf0f1;" text="C O N N E C T" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="40.0" />
                </BorderPane.margin>
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/connect_icon-icons.com_70225.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
          </bottom>
          <BorderPane.margin>

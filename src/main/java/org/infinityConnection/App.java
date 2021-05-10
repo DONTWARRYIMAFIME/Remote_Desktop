@@ -28,6 +28,7 @@ public class App extends Application {
         SceneController.addScene("drawerScene", Loader.loadFXML("scenes/drawer"));
         SceneController.addScene("containerScene", Loader.loadFXML("scenes/container"));
         SceneController.addScene("serverScene", Loader.loadFXML("scenes/server"));
+        SceneController.addScene("membersScene", Loader.loadFXML("scenes/members"));
 
         SceneController.childContainer = (StackPane) SceneController.getParent("containerScene").getChildren().get(3);
 

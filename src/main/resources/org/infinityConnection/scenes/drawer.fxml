@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxWidth="255.0" minWidth="255.0" prefWidth="255.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.drawer.DrawerSceneController">
+<BorderPane stylesheets="@../style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.drawer.DrawerSceneController">
    <center>
       <VBox prefWidth="255.0" BorderPane.alignment="CENTER">
          <children>
@@ -40,7 +40,7 @@
             </HBox>
             <HBox prefWidth="255.0">
                <children>
-                  <JFXToggleNode fx:id="btnClient" alignment="CENTER_LEFT" graphicTextGap="15.0" onAction="#onClient" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T  T O" toggleGroup="$toolbarButton">
+                  <JFXToggleNode fx:id="btnClient" alignment="CENTER_LEFT" graphicTextGap="15.0" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T  T O" toggleGroup="$toolbarButton">
                      <selectedColor>
                         <Color red="1.0" green="1.0" blue="1.0" opacity="0.6000000238418579" />
                      </selectedColor>
@@ -57,7 +57,7 @@
             </HBox>
             <HBox prefWidth="255.0">
                <children>
-                  <JFXToggleNode fx:id="btnServer" alignment="CENTER_LEFT" graphicTextGap="21.0" onAction="#onServer" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T I O N  I N F O" toggleGroup="$toolbarButton">
+                  <JFXToggleNode fx:id="btnServer" alignment="CENTER_LEFT" graphicTextGap="21.0" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T I O N  I N F O" toggleGroup="$toolbarButton">
                      <selectedColor>
                         <Color red="1.0" green="1.0" blue="1.0" opacity="0.6000000238418579" />
                      </selectedColor>

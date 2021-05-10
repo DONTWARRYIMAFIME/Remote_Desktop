@@ -8,6 +8,7 @@ module org.infinityConnection {
     opens org.infinityConnection.scenes.load to javafx.fxml;
     opens org.infinityConnection.scenes.client to javafx.fxml;
     opens org.infinityConnection.scenes.server to javafx.fxml;
+    opens org.infinityConnection.scenes.members to javafx.fxml;
     opens org.infinityConnection.scenes.drawer to javafx.fxml;
     opens org.infinityConnection.scenes.container to javafx.fxml;
     opens org.infinityConnection.scenes.connect to javafx.fxml;

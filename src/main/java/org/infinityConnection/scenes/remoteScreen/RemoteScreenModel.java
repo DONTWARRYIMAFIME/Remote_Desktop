@@ -3,16 +3,17 @@ package org.infinityConnection.scenes.remoteScreen;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
+import org.infinityConnection.scenes.client.ReceiveScreen;
 import org.infinityConnection.scenes.client.SendEvents;
 import org.infinityConnection.utils.EventsChangeListener;
-import org.infinityConnection.scenes.client.ReceiveScreen;
-import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

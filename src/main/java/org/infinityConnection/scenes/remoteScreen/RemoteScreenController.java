@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.infinityConnection.utils.ConnectionStatus;
+
 import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.utils.SceneController;
 
@@ -33,7 +33,6 @@ public class RemoteScreenController {
     private double iwFitWidth;
     private double iwFitHeight;
 
-    private Stage stage;
     private final RemoteScreenModel model = new RemoteScreenModel();
     private final ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> onResize();
 
@@ -170,7 +169,7 @@ public class RemoteScreenController {
     }
 
     public void initialize() {
-        stage = (Stage) SceneController.scene.getWindow();
+        Stage stage = (Stage) SceneController.scene.getWindow();
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
     }
 

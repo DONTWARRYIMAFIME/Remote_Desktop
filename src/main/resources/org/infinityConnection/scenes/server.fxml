@@ -20,7 +20,7 @@
                <bottom>
                   <JFXButton fx:id="btnRegenerate" contentDisplay="RIGHT" graphicTextGap="90.0" minWidth="270.0" style="-fx-background-color: #ecf0f1;" text="R E G E N E R A T E" BorderPane.alignment="CENTER">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                      <BorderPane.margin>
                         <Insets bottom="40.0" />
@@ -46,7 +46,7 @@
                               </Label>
                               <JFXTextField fx:id="tfIP" editable="false" focusColor="#212528" focusTraversable="false" promptText="User's IP" unFocusColor="#212528">
                                  <font>
-                                    <Font size="14.0" />
+                                    <Font name="System Italic" size="15.0" />
                                  </font>
                               </JFXTextField>
                            </children>
@@ -60,7 +60,7 @@
                               </Label>
                               <JFXTextField fx:id="tfPassword" editable="false" focusColor="#212528" focusTraversable="false" promptText="User's Password" unFocusColor="#212528">
                                  <font>
-                                    <Font size="14.0" />
+                                    <Font name="System Italic" size="15.0" />
                                  </font>
                               </JFXTextField>
                            </children>

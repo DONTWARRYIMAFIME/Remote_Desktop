@@ -52,7 +52,7 @@
       </JFXToolbar>
    </bottom>
    <left>
-      <JFXDrawer fx:id="drawer" defaultDrawerSize="255.0" prefHeight="520.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
+      <JFXDrawer fx:id="drawer" defaultDrawerSize="255.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
    </left>
    <center>
       <StackPane fx:id="stackPane" style="-fx-view-order: 1;" BorderPane.alignment="CENTER" />

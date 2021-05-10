@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXToolbar?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="520.0" minWidth="645.0" prefHeight="520.0" prefWidth="645.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.members.MembersController">
+   <top>
+      <JFXToolbar prefHeight="40.0" style="-fx-background-color: #9251ed;" BorderPane.alignment="CENTER">
+         <center>
+            <Label text="On this page you will see all members that is connected to you right now" textFill="#ecf0f1" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="16.0" />
+               </font>
+            </Label>
+         </center>
+      </JFXToolbar>
+   </top>
+   <center>
+      <JFXTreeTableView fx:id="treeTableView" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
