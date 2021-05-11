@@ -1,6 +1,8 @@
 package org.infinityConnection.scenes.server;
 
 import org.infinityConnection.scenes.client.Verification;
+import org.infinityConnection.scenes.members.Member;
+import org.infinityConnection.scenes.members.MembersController;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -23,6 +25,10 @@ public class ServerThread {
     private DataInputStream dis;
     private DataOutputStream dos;
 
+    private Member member;
+    private String clientName;
+    private String clientIP;
+
     private boolean stopWasRequested = false;
     private final ExecutorService service = Executors.newCachedThreadPool();
 
@@ -36,9 +42,7 @@ public class ServerThread {
         this.socket = socket;
         this.serverPassword = serverPassword;
 
-        service.submit(() -> {
-           start();
-        });
+        service.submit(() -> start());
     }
 
     private void start() {
@@ -47,12 +51,18 @@ public class ServerThread {
             dis = new DataInputStream(socket.getInputStream());
             dos = new DataOutputStream(socket.getOutputStream());
 
+            clientName = dis.readUTF();
+            clientIP = dis.readUTF();
+
+            member = new Member(clientName, clientIP);
+            MembersController.members.add(member);
+
             String receivedPassword = dis.readUTF();
 
             if (Objects.equals(receivedPassword, serverPassword)) {
                 dos.writeUTF(Verification.CORRECT.toString());
 
-                System.out.println("Server: new client connected");
+                System.out.println("Server: new client logged in");
 
                 Robot robot = new Robot();
                 Rectangle rectangle = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
@@ -85,7 +95,6 @@ public class ServerThread {
         return stopWasRequested;
     }
 
-
     public void shutDown() {
         stopWasRequested = true;
 
@@ -95,6 +104,11 @@ public class ServerThread {
 
         if (!rEvent.isStopped()) {
             rEvent.shutDown();
+        }
+
+        if (member != null) {
+            member.stopTimer();
+            MembersController.members.remove(member);
         }
 
         service.shutdown();

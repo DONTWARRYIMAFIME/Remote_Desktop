@@ -1,17 +1,16 @@
 package org.infinityConnection.scenes.connect;
 
 import javafx.application.Platform;
-import org.infinityConnection.utils.ConnectionStatus;
+import org.infinityConnection.scenes.server.Server;
+import org.infinityConnection.utils.*;
 import org.infinityConnection.scenes.client.Verification;
 import org.infinityConnection.scenes.client.Authentication;
-import org.infinityConnection.utils.EffectType;
-import org.infinityConnection.utils.EventsChangeListener;
 import org.infinityConnection.scenes.remoteScreen.RemoteScreen;
-import org.infinityConnection.utils.SceneController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -59,6 +58,9 @@ public class ConnectSceneModel {
 
                 dis = new DataInputStream(socket.getInputStream());
                 dos = new DataOutputStream(socket.getOutputStream());
+
+                dos.writeUTF(InetAddress.getLocalHost().getHostName());
+                dos.writeUTF(ServerUtils.getIP());
 
                 Authentication authentication = new Authentication(dis, dos, password);
 

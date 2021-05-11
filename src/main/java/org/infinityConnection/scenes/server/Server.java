@@ -2,11 +2,13 @@ package org.infinityConnection.scenes.server;
 
 import javafx.application.Platform;
 import org.infinityConnection.utils.EventsChangeListener;
+import org.infinityConnection.utils.PasswordGenerator;
+import org.infinityConnection.utils.ServerUtils;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +17,7 @@ import java.util.concurrent.Executors;
 public class Server {
 
     private int port;
-    private final String serverPassword;
+    private String serverPassword;
     private final int maxUsers = 10;
 
     private ServerSocket serverSocket;
@@ -26,10 +28,6 @@ public class Server {
     private final List<EventsChangeListener> listeners = new ArrayList<>();
 
     private final LinkedList<ServerThread> clients = new LinkedList<>();
-
-    private String generatePassword() {
-        return "1111";
-    }
 
     private void fireChangeEvent() {
         for (EventsChangeListener listener : listeners) {
@@ -58,6 +56,15 @@ public class Server {
         }
     }
 
+    private String generatePassword() {
+        PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
+                .useDigits(true)
+                .useLower(true)
+                .useUpper(true)
+                .build();
+        return passwordGenerator.generate(16);
+    }
+
     public Server() {
         this.port = 8001;
         this.serverPassword = generatePassword();
@@ -68,34 +75,16 @@ public class Server {
         this.port = port;
     }
 
+    public void regeneratePassword() {
+        serverPassword = generatePassword();
+    }
+
     public String getServerPassword() {
         return serverPassword;
     }
 
     public String getIP() {
-
-        String ip;
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface iface = interfaces.nextElement();
-                // filters out 127.0.0.1 and inactive interfaces
-                if (iface.isLoopback() || !iface.isUp())
-                    continue;
-
-                Enumeration<InetAddress> addresses = iface.getInetAddresses();
-                if(addresses.hasMoreElements()) {
-                    InetAddress addr = addresses.nextElement();
-                    ip = addr.getHostAddress();
-                    System.out.println(iface.getDisplayName() + " " + ip);
-                    return ip;
-                }
-            }
-        } catch (SocketException e) {
-            throw new RuntimeException(e);
-        }
-
-        return "127.0.0.1";
+        return ServerUtils.getIP();
     }
 
     public int getClientsCount() {

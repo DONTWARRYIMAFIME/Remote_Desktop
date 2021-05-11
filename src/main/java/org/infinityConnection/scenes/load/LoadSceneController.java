@@ -18,7 +18,7 @@ public class LoadSceneController {
         fadeOut.setToValue(0);
         fadeOut.setCycleCount(1);
 
-        fadeOut.setDelay(Duration.seconds(2));
+        fadeOut.setDelay(Duration.seconds(1));
         fadeOut.play();
 
         fadeOut.setOnFinished((e) -> new ContainerScene());

@@ -1,0 +1,32 @@
+.jfx-tree-table-view {
+    /*-fx-alignment: CENTER;*/
+}
+
+.jfx-tree-table-view .column-header-background {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+}
+
+/*.jfx-tree-table-view .column-cell-background:odd {*/
+/*    -fx-background-color: #bfff00;*/
+/*    -fx-background-insets: 0, 0 0 1 0;*/
+/*}*/
+
+.tree-table-cell {
+    -fx-alignment: CENTER;
+    -fx-font-size: 13;
+}
+
+.tree-table-row-cell {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-text-fill: white;
+}
+
+.tree-table-row-cell:odd {
+    -fx-background-color: rgba(190, 190, 190, 0.1);
+}
+
+.tree-table-row-cell:hover {
+    -fx-background-color: rgba(146, 81, 237, 0.3);
+}

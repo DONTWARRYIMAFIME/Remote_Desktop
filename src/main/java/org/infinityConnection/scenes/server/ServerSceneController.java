@@ -77,5 +77,13 @@ public class ServerSceneController {
         }
     }
 
+    public void onRegenerate() {
+        toggleButton.setSelected(false);
+
+        server.shutDown();
+        server.regeneratePassword();
+        tfPassword.setText(server.getServerPassword());
+    }
+
 
 }

@@ -18,7 +18,7 @@
          <right>
             <BorderPane prefHeight="520.0" prefWidth="320.0" style="-fx-background-color: #589fdf;" BorderPane.alignment="CENTER">
                <bottom>
-                  <JFXButton fx:id="btnRegenerate" contentDisplay="RIGHT" graphicTextGap="90.0" minWidth="270.0" style="-fx-background-color: #ecf0f1;" text="R E G E N E R A T E" BorderPane.alignment="CENTER">
+                  <JFXButton fx:id="btnRegenerate" contentDisplay="RIGHT" graphicTextGap="90.0" minWidth="270.0" onAction="#onRegenerate" style="-fx-background-color: #ecf0f1;" text="R E G E N E R A T E" BorderPane.alignment="CENTER">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

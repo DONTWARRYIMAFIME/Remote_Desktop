@@ -8,8 +8,8 @@ import org.trayNotification.notification.TrayNotification;
 
 public class NotificationsController {
     public static void showNewUserNotification() {
-        String title = "Free Remote Desktop";
-        String message = "New user was connected";
+        String title = "Infinity connection";
+        String message = "A New client was connected !";
         Notification notification = Notifications.SUCCESS;
 
         TrayNotification tray = new TrayNotification();
@@ -21,8 +21,8 @@ public class NotificationsController {
     }
 
     public static void showUserDisconnected() {
-        String title = "Free Remote Desktop";
-        String message = "User disconnected";
+        String title = "Infinity connection";
+        String message = "The client was disconnected";
         Notification notification = Notifications.NOTICE;
 
         TrayNotification tray = new TrayNotification();

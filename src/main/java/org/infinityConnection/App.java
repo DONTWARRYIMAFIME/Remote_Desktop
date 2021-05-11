@@ -21,16 +21,17 @@ public class App extends Application {
         SceneController.scene = scene;
         SceneController.rootContainer = (StackPane) scene.getRoot();
 
-        SceneController.addScene("loadScene", Loader.loadFXML("scenes/load"));
         SceneController.addScene("remoteScreen", Loader.loadFXML("scenes/remoteScreen"));
         SceneController.addScene("connectScene", Loader.loadFXML("scenes/connect"));
         SceneController.addScene("clientScene", Loader.loadFXML("scenes/client"));
         SceneController.addScene("drawerScene", Loader.loadFXML("scenes/drawer"));
         SceneController.addScene("containerScene", Loader.loadFXML("scenes/container"));
-        SceneController.addScene("serverScene", Loader.loadFXML("scenes/server"));
-        SceneController.addScene("membersScene", Loader.loadFXML("scenes/members"));
 
         SceneController.childContainer = (StackPane) SceneController.getParent("containerScene").getChildren().get(3);
+
+        SceneController.addScene("serverScene", Loader.loadFXML("scenes/server"));
+        SceneController.addScene("membersScene", Loader.loadFXML("scenes/members"));
+        SceneController.addScene("loadScene", Loader.loadFXML("scenes/load"));
 
         SceneController.setRoot("loadScene", EffectType.NULL);
 
