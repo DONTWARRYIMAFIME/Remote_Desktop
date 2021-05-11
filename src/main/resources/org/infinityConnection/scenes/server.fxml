@@ -76,8 +76,13 @@
          <center>
             <BorderPane prefWidth="1600.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
                <center>
-                  <VBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
+                  <VBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
+                        <Label text="Screen Sharing" textFill="#0000009a">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
                         <Label text="Do you want to share your screen? You on the right tab. Here you can find all the information you need to share your screen right now! On the right side there are your ip address and session password, with their help new users will be able to connect to you" textAlignment="JUSTIFY" textFill="#000000d8" wrapText="true">
                            <font>
                               <Font size="16.0" />

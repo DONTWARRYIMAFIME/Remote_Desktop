@@ -20,27 +20,7 @@
          <children>
             <HBox prefWidth="255.0">
                <children>
-                  <JFXToggleNode fx:id="btnInformation" alignment="CENTER_LEFT" graphicTextGap="15.0" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="I N F O R M A T I O N">
-                     <selectedColor>
-                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.4399999976158142" />
-                     </selectedColor>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="toolbarButton" />
-                     </toggleGroup>
-                     <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/information.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </JFXToggleNode>
-                  <Rectangle fill="#f5d058b3" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="toolbarButtonColor" width="15.0" />
-               </children>
-            </HBox>
-            <HBox prefWidth="255.0">
-               <children>
-                  <JFXToggleNode fx:id="btnClient" alignment="CENTER_LEFT" graphicTextGap="15.0" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T  T O" toggleGroup="$toolbarButton">
+                  <JFXToggleNode fx:id="btnClient" alignment="CENTER_LEFT" graphicTextGap="15.0" prefHeight="40.0" prefWidth="240.0" styleClass="toolbarButton" text="C O N N E C T  T O">
                      <selectedColor>
                         <Color red="1.0" green="1.0" blue="1.0" opacity="0.6000000238418579" />
                      </selectedColor>
@@ -51,6 +31,9 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="toolbarButton" />
+                     </toggleGroup>
                   </JFXToggleNode>
                   <Rectangle fill="#3be38499" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="toolbarButtonColor" width="15.0" />
                </children>

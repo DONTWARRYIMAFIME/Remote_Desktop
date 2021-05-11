@@ -14,9 +14,6 @@ import java.util.List;
 public class DrawerSceneController {
 
     @FXML
-    private JFXToggleNode btnInformation;
-
-    @FXML
     private JFXToggleNode btnClient;
 
     @FXML
@@ -24,9 +21,6 @@ public class DrawerSceneController {
 
     @FXML
     private JFXToggleNode btnMembers;
-
-    @FXML
-    private JFXButton btnExit;
 
     @FXML
     private ToggleGroup toolbarButton;
@@ -40,12 +34,10 @@ public class DrawerSceneController {
                 oldVal.setSelected(true);
         });
 
-        buttons.add(btnInformation);
         buttons.add(btnClient);
         buttons.add(btnServer);
         buttons.add(btnMembers);
 
-        btnInformation.setOnAction((e) -> onInformation(calculateEffect()));
         btnClient.setOnAction((e) -> onClient(calculateEffect()));
         btnServer.setOnAction((e) -> onServer(calculateEffect()));
         btnMembers.setOnAction((e) -> onMembers(calculateEffect()));
@@ -59,10 +51,6 @@ public class DrawerSceneController {
         EffectType effectType = lastId < newId ? EffectType.POP_UP : EffectType.POP_DOWN;
         lastId = newId;
         return effectType;
-    }
-
-    public void onInformation(EffectType effectType) {
-
     }
 
     public void onClient(EffectType effectType) {
