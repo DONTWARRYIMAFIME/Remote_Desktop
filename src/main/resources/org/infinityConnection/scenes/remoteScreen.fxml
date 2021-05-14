@@ -10,7 +10,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.infinityConnection.scenes.remoteScreen.RemoteScreenController">
    <center>
-      <ImageView fx:id="iw" fitHeight="550.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+      <ImageView fx:id="iw" fitHeight="550.0" fitWidth="900.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
    <top>
       <JFXToolbar fx:id="toolbar" prefHeight="50.0" style="-fx-background-color: #212528;" BorderPane.alignment="CENTER">

@@ -130,31 +130,17 @@ public class RemoteScreenController {
 
             @Override
             public boolean isAutoCloasable() {
-                return true;
+                return false;
             }
         };
     }
 
     //Keyboard events
-    private EventsChangeListener onKeyPressed() {
-        return new EventsChangeListener() {
-            @Override
-            public void onReadingChange() {
-                iw.setOnKeyTyped(model.getKeyPressedEH());
-            }
-
-            @Override
-            public boolean isAutoCloasable() {
-                return true;
-            }
-        };
-    }
-
     private EventsChangeListener onKeyReleased() {
         return new EventsChangeListener() {
             @Override
             public void onReadingChange() {
-                iw.setOnKeyReleased(model.getKeyReleasedEH());
+                iw.setOnKeyTyped(model.getKeyPressedEH());
             }
 
             @Override
@@ -175,6 +161,7 @@ public class RemoteScreenController {
 
     public void exchangeData(DataInputStream dis, DataOutputStream dos) {
         iw.setImage(null);
+
         model.start(dis, dos);
 
         SceneController.scene.widthProperty().addListener(stageSizeListener);
@@ -190,13 +177,12 @@ public class RemoteScreenController {
         model.addListener(onMousePressed());
         model.addListener(onMouseReleased());
 
-        model.addListener(onKeyPressed());
         model.addListener(onKeyReleased());
-
         Platform.runLater(() -> {
-            iw.requestFocus();
             onResize();
         });
+
+
     }
 
     public boolean isStopped() {

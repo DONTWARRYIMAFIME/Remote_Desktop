@@ -3,6 +3,7 @@ package org.infinityConnection.scenes.server;
 import org.infinityConnection.utils.KeyEvents;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.NoSuchElementException;

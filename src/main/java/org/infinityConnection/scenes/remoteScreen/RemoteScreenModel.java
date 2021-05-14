@@ -128,10 +128,6 @@ public class RemoteScreenModel {
         return sendEvents.getKeyPressedEH();
     }
 
-    public EventHandler getKeyReleasedEH() {
-        return sendEvents.getKeyReleasedEH();
-    }
-
     public Image getReceivedImage() {
         return receiveScreen.getReceivedImage();
     }

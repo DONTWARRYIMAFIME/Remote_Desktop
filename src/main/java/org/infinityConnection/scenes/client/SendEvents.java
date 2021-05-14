@@ -52,15 +52,9 @@ public class SendEvents {
     }
 
     private void onKeyPressed(KeyEvent e) {
-        printWriter.println(KeyEvents.PRESS_KEY.getEventID());
+        printWriter.println(KeyEvents.RELEASE_KEY.getEventID());
         printWriter.println(java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0)));
         printWriter.flush();
-    }
-
-    private void onKeyReleased(KeyEvent e) {
-//        printWriter.println(KeyEvents.RELEASE_KEY.getEventID());
-//        printWriter.println(java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0)));
-//        printWriter.flush();
     }
 
     public void setComponents(DataOutputStream dos, double ssWidth, double ssHeight) {
@@ -85,10 +79,6 @@ public class SendEvents {
 
     public EventHandler getKeyPressedEH() {
         return event -> onKeyPressed((KeyEvent) event);
-    }
-
-    public EventHandler getKeyReleasedEH() {
-        return event -> onKeyReleased((KeyEvent) event);
     }
 
 }
