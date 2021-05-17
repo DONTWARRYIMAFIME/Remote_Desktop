@@ -31,8 +31,7 @@ public class ReceiveEvents {
                 switch (command) {
                     case PRESS_MOUSE -> robot.mousePress(scanner.nextInt());
                     case RELEASE_MOUSE -> robot.mouseRelease(scanner.nextInt());
-                    case PRESS_KEY -> robot.keyPress(scanner.nextInt());
-                    case RELEASE_KEY -> robot.keyRelease(scanner.nextInt());
+                    case RELEASE_KEY -> robot.keyPress(scanner.nextInt());
                     case MOVE_MOUSE -> robot.mouseMove(scanner.nextInt(), scanner.nextInt());
                     default -> System.out.println("ReceiveEvents. Unknown event");
                 }

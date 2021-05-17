@@ -4,9 +4,8 @@ public enum KeyEvents {
     UNKNOWN_EVENT(0),
     PRESS_MOUSE(1),
     RELEASE_MOUSE(2),
-    PRESS_KEY(3),
-    RELEASE_KEY(4),
-    MOVE_MOUSE(5);
+    RELEASE_KEY(3),
+    MOVE_MOUSE(4);
 
     private final int eventID;
 
