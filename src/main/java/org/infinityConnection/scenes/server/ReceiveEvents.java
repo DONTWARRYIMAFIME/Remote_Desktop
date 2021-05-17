@@ -47,6 +47,7 @@ public class ReceiveEvents {
 
                 while (drag) {
                     robot.mousePress(key);
+                    robot.delay(100);
                 }
 
             }
