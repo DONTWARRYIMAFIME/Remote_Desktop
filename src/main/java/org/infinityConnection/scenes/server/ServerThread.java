@@ -99,18 +99,16 @@ public class ServerThread {
     public void shutDown() {
         stopWasRequested = true;
 
-        if (!sEvent.isStopped()) {
+        if (sEvent != null && !sEvent.isStopped()) {
             sEvent.shutDown();
         }
 
-        if (!rEvent.isStopped()) {
+        if (rEvent != null && !rEvent.isStopped()) {
             rEvent.shutDown();
         }
 
-        if (member != null) {
-            member.stopTimer();
-            MembersController.members.remove(member);
-        }
+        member.stopTimer();
+        MembersController.members.remove(member);
 
         service.shutdown();
         System.out.println("Client disconnected");
