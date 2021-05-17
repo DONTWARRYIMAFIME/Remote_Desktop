@@ -48,7 +48,6 @@ public class ConnectSceneController {
         rotateTransition.setRate(3);
         rotateTransition.setCycleCount(18);
 
-        rotateTransition.setOnFinished((e) -> setRotation(c, reverse, angle, duration));
         rotateTransition.play();
     }
 
@@ -129,15 +128,15 @@ public class ConnectSceneController {
 
         initColorsArray();
 
-        setRotation(circle1, true, 360, 10);
-        setRotation(circle2, true, 180, 18);
-        setRotation(circle3, true, 145, 24);
-
         Stage stage = (Stage) SceneController.scene.getWindow();
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
     }
 
     public void establishConnection(String ip, int port, String password) {
+        setRotation(circle1, true, 360, 60);
+        setRotation(circle2, true, 180, 58);
+        setRotation(circle3, true, 145, 74);
+
         connectionStatus = ConnectionStatus.CONNECTING;
 
         setNormalColors();
