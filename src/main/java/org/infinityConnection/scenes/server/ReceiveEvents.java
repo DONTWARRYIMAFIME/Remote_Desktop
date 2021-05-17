@@ -28,10 +28,6 @@ public class ReceiveEvents {
 
                 System.out.println(command.toString());
 
-                //robot.mouseMove(0, 0);
-
-                //System.out.println(KeyEvent.getKeyText(scanner.nextInt()));
-
                 switch (command) {
                     case PRESS_MOUSE -> robot.mousePress(scanner.nextInt());
                     case RELEASE_MOUSE -> robot.mouseRelease(scanner.nextInt());
@@ -41,9 +37,9 @@ public class ReceiveEvents {
                     default -> System.out.println("ReceiveEvents. Unknown event");
                 }
 
-                //robot.delay(1000);
             }
-
+        } catch (IllegalArgumentException e) {
+            System.out.println("Could not recognize pressed key");
         } catch (NoSuchElementException e) {
             shutDown();
         } catch (Exception e) {

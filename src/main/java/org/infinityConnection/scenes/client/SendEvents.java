@@ -51,7 +51,7 @@ public class SendEvents {
         printWriter.flush();
     }
 
-    private void onKeyReleased(KeyEvent e) {
+    private void onKeyPressed(KeyEvent e) {
         try {
             int events = KeyEvents.RELEASE_KEY.getEventID();
             int key = java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0));
@@ -84,8 +84,8 @@ public class SendEvents {
         return event -> onMouseReleased((MouseEvent) event);
     }
 
-    public EventHandler getKeyReleasedEH() {
-        return event -> onKeyReleased((KeyEvent) event);
+    public EventHandler getKeyPressedEH() {
+        return event -> onKeyPressed((KeyEvent) event);
     }
 
 }

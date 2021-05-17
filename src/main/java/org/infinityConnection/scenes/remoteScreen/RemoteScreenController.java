@@ -68,13 +68,7 @@ public class RemoteScreenController {
         return new EventsChangeListener() {
             @Override
             public void onReadingChange() {
-                Image image = iw.getImage();
-                Platform.runLater(() -> {
-                    iw.setImage(model.getReceivedImage());
-                    if (image == null) {
-                        onResize();
-                    }
-                });
+                iw.setImage(model.getReceivedImage());
             }
 
             @Override
@@ -97,7 +91,7 @@ public class RemoteScreenController {
         return new EventsChangeListener() {
             @Override
             public void onReadingChange() {
-                iw.setOnMouseClicked(model.getMouseMovedEH(iwFitWidth, iwFitHeight));
+                iw.setOnMouseMoved(model.getMouseMovedEH(iwFitWidth, iwFitHeight));
             }
 
             @Override
