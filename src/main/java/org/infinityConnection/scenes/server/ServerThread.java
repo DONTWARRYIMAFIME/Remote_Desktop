@@ -1,5 +1,6 @@
 package org.infinityConnection.scenes.server;
 
+import javafx.application.Platform;
 import org.infinityConnection.scenes.client.Verification;
 import org.infinityConnection.scenes.members.Member;
 import org.infinityConnection.scenes.members.MembersController;
@@ -81,7 +82,7 @@ public class ServerThread {
                 }
 
             } else {
-                shutDown();
+                Platform.runLater(() -> shutDown());
                 dos.writeUTF(Verification.INCORRECT.toString());
             }
         } catch (IOException | AWTException | InterruptedException e) {
