@@ -130,7 +130,7 @@ public class RemoteScreenController {
 
             @Override
             public boolean isAutoCloasable() {
-                return false;
+                return true;
             }
         };
     }
@@ -140,7 +140,7 @@ public class RemoteScreenController {
         return new EventsChangeListener() {
             @Override
             public void onReadingChange() {
-                iw.setOnKeyTyped(model.getKeyPressedEH());
+                iw.setOnKeyTyped(model.getKeyReleasedEH());
             }
 
             @Override

@@ -19,11 +19,13 @@ public class ServerUtils {
                     continue;
 
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
-                if(addresses.hasMoreElements()) {
+                while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     ip = addr.getHostAddress();
                     System.out.println(iface.getDisplayName() + " " + ip);
-                    return ip;
+                    if (ip.matches("([0-9]{1,3}[\\.]){3}[0-9]{1,3}")) {
+                        return ip;
+                    }
                 }
             }
         } catch (SocketException e) {

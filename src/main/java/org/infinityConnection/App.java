@@ -34,6 +34,7 @@ public class App extends Application {
         SceneController.addScene("loadScene", Loader.loadFXML("scenes/load"));
 
         SceneController.setRoot("loadScene", EffectType.NULL);
+        SceneController.setChild("clientScene", EffectType.NULL);
 
         stage.show();
 

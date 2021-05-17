@@ -51,10 +51,17 @@ public class SendEvents {
         printWriter.flush();
     }
 
-    private void onKeyPressed(KeyEvent e) {
-        printWriter.println(KeyEvents.RELEASE_KEY.getEventID());
-        printWriter.println(java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0)));
-        printWriter.flush();
+    private void onKeyReleased(KeyEvent e) {
+        try {
+            int events = KeyEvents.RELEASE_KEY.getEventID();
+            int key = java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0));
+
+            printWriter.println(events);
+            printWriter.println(key);
+            printWriter.flush();
+        } catch (Exception ex) {
+            System.out.println("Could not recognize pressed key");
+        }
     }
 
     public void setComponents(DataOutputStream dos, double ssWidth, double ssHeight) {
@@ -77,8 +84,8 @@ public class SendEvents {
         return event -> onMouseReleased((MouseEvent) event);
     }
 
-    public EventHandler getKeyPressedEH() {
-        return event -> onKeyPressed((KeyEvent) event);
+    public EventHandler getKeyReleasedEH() {
+        return event -> onKeyReleased((KeyEvent) event);
     }
 
 }

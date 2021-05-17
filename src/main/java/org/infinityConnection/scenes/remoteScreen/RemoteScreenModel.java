@@ -124,8 +124,8 @@ public class RemoteScreenModel {
         return sendEvents.getMouseReleasedEH();
     }
 
-    public EventHandler getKeyPressedEH() {
-        return sendEvents.getKeyPressedEH();
+    public EventHandler getKeyReleasedEH() {
+        return sendEvents.getKeyReleasedEH();
     }
 
     public Image getReceivedImage() {
