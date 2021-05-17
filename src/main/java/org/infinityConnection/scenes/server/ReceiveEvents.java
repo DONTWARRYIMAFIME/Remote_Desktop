@@ -29,9 +29,13 @@ public class ReceiveEvents {
                 System.out.println(command.toString());
 
                 boolean drag = false;
+                int key = 0;
 
                 switch (command) {
-                    case PRESS_MOUSE -> drag = true;
+                    case PRESS_MOUSE -> {
+                        drag = true;
+                        key = scanner.nextInt();
+                    }
                     case RELEASE_MOUSE -> {
                         drag = false;
                         robot.mouseRelease(scanner.nextInt());
@@ -42,7 +46,7 @@ public class ReceiveEvents {
                 }
 
                 while (drag) {
-                    robot.mousePress(scanner.nextInt());
+                    robot.mousePress(key);
                 }
 
             }

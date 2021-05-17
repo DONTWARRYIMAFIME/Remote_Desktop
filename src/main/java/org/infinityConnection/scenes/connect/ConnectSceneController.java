@@ -133,9 +133,9 @@ public class ConnectSceneController {
     }
 
     public void establishConnection(String ip, int port, String password) {
-        setRotation(circle1, true, 360, 60);
-        setRotation(circle2, true, 180, 58);
-        setRotation(circle3, true, 145, 74);
+        setRotation(circle1, true, 360, 10);
+        setRotation(circle2, true, 180, 18);
+        setRotation(circle3, true, 145, 24);
 
         connectionStatus = ConnectionStatus.CONNECTING;
 
