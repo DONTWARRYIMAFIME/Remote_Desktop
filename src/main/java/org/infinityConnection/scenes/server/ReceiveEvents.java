@@ -28,26 +28,12 @@ public class ReceiveEvents {
 
                 System.out.println(command.toString());
 
-                boolean drag = false;
-                int key = 0;
-
                 switch (command) {
-                    case PRESS_MOUSE -> {
-                        drag = true;
-                        key = scanner.nextInt();
-                    }
-                    case RELEASE_MOUSE -> {
-                        drag = false;
-                        robot.mouseRelease(scanner.nextInt());
-                    }
+                    case PRESS_MOUSE -> robot.mousePress(scanner.nextInt());
+                    case RELEASE_MOUSE -> robot.mouseRelease(scanner.nextInt());
                     case RELEASE_KEY -> robot.keyPress(scanner.nextInt());
                     case MOVE_MOUSE -> robot.mouseMove(scanner.nextInt(), scanner.nextInt());
                     default -> System.out.println("ReceiveEvents. Unknown event");
-                }
-
-                while (drag) {
-                    robot.mousePress(key);
-                    robot.delay(100);
                 }
 
             }
