@@ -81,8 +81,8 @@ public class ServerThread {
                 }
 
             } else {
-                dos.writeUTF(Verification.INCORRECT.toString());
                 shutDown();
+                dos.writeUTF(Verification.INCORRECT.toString());
             }
         } catch (IOException | AWTException | InterruptedException e) {
             e.printStackTrace();
