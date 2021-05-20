@@ -25,10 +25,10 @@ public class SendScreen {
 
             Thread.sleep(10);
         } catch (IOException e) {
-            shutDown();
+            shutdown();
         } catch (Exception e) {
             e.printStackTrace();
-            shutDown();
+            shutdown();
         }
 
     }
@@ -49,7 +49,7 @@ public class SendScreen {
         return stopWasRequested;
     }
 
-    public void shutDown() {
+    public void shutdown() {
         stopWasRequested = true;
 
         try {

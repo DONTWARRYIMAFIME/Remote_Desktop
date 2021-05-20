@@ -1,13 +1,13 @@
 package org.infinityConnection.scenes.client;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class Authentication {
 
-    private Socket socket;
-    private DataInputStream dis;
-    private DataOutputStream dos;
+    private final DataInputStream dis;
+    private final DataOutputStream dos;
     private final String password;
 
     public Authentication(DataInputStream dis, DataOutputStream dos, String password) {
@@ -17,7 +17,6 @@ public class Authentication {
     }
 
     public Verification tryToConnect() throws IOException {
-
 
         try{
             dos.writeUTF(password);

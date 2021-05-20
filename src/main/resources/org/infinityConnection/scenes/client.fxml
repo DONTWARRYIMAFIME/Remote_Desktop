@@ -107,7 +107,7 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Label text="Do you want to share your screen? You on the right tab. Here you can find all the information you need to share your screen right now! On the right side there are your ip address and session password, with their help new users will be able to connect to you" textFill="#000000be" wrapText="true">
+                        <Label text="Want to establish a connection to a remote computer? This is much easier than it sounds. You just need to enter the server ip-address and its session password, after which you can safely click on the &quot;Connect&quot; button.Want to establish a connection to a remote computer? This is much easier than it sounds. You just need to enter the server ip-address and its session password, after which you can safely click on the &quot;Connect&quot; button." textFill="#000000be" wrapText="true">
                            <font>
                               <Font size="16.0" />
                            </font>

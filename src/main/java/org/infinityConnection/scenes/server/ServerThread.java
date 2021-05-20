@@ -35,7 +35,7 @@ public class ServerThread {
 
     private void checkConnection() {
         if (sEvent.isStopped() || rEvent.isStopped()) {
-            shutDown();
+            shutdown();
         }
     }
 
@@ -82,12 +82,12 @@ public class ServerThread {
                 }
 
             } else {
-                Platform.runLater(() -> shutDown());
+                Platform.runLater(() -> shutdown());
                 dos.writeUTF(Verification.INCORRECT.toString());
             }
         } catch (IOException | AWTException | InterruptedException e) {
             e.printStackTrace();
-            shutDown();
+            shutdown();
         }
 
     }
@@ -96,15 +96,15 @@ public class ServerThread {
         return stopWasRequested;
     }
 
-    public void shutDown() {
+    public void shutdown() {
         stopWasRequested = true;
 
         if (sEvent != null && !sEvent.isStopped()) {
-            sEvent.shutDown();
+            sEvent.shutdown();
         }
 
         if (rEvent != null && !rEvent.isStopped()) {
-            rEvent.shutDown();
+            rEvent.shutdown();
         }
 
         member.stopTimer();

@@ -2,7 +2,6 @@ package org.infinityConnection.scenes.server;
 
 import javafx.application.Platform;
 import org.infinityConnection.utils.EventsChangeListener;
-import org.infinityConnection.utils.PasswordGenerator;
 import org.infinityConnection.utils.ServerUtils;
 
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class Server {
 
     private void shutDownClients() {
         for (ServerThread client : clients) {
-            client.shutDown();
+            client.shutdown();
         }
     }
 
@@ -56,18 +55,9 @@ public class Server {
         }
     }
 
-    private String generatePassword() {
-        PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
-                .useDigits(true)
-                .useLower(true)
-                .useUpper(true)
-                .build();
-        return passwordGenerator.generate(16);
-    }
-
     public Server() {
         this.port = 8001;
-        this.serverPassword = generatePassword();
+        this.serverPassword = ServerUtils.generatePassword();
     }
 
     public Server(int port) {
@@ -76,7 +66,7 @@ public class Server {
     }
 
     public void regeneratePassword() {
-        serverPassword = generatePassword();
+        serverPassword = ServerUtils.generatePassword();
     }
 
     public String getServerPassword() {
@@ -126,7 +116,7 @@ public class Server {
         });
     }
 
-    public void shutDown() {
+    public void shutdown() {
         stopWasRequested = true;
         removeListeners();
 

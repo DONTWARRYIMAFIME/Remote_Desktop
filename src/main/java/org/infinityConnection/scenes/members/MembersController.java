@@ -46,6 +46,7 @@ public class MembersController {
         treeTableView.setShowRoot(false);
 
         SceneController.childContainer.widthProperty().addListener(stageSizeListener);
+
     }
 
 }

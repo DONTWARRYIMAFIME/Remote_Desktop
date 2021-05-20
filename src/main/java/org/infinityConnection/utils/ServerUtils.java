@@ -36,7 +36,12 @@ public class ServerUtils {
     }
 
     public static String generatePassword() {
-        return "1111";
+        PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
+                .useDigits(true)
+                .useLower(true)
+                .useUpper(true)
+                .build();
+        return passwordGenerator.generate(16);
     }
 
 

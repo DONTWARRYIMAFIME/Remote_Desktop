@@ -33,27 +33,27 @@ public class SendEvents {
         double xScale = ssWidth / realWidth;
         double yScale = ssHeight / realHeight;
 
-        printWriter.println(KeyEvents.MOVE_MOUSE.getEventID());
+        printWriter.println(KeyEvents.MOUSE_MOVE.getEventID());
         printWriter.println((int) (e.getX() * xScale));
         printWriter.println((int) (e.getY() * yScale));
         printWriter.flush();
     }
 
     private void onMousePressed(MouseEvent e) {
-        printWriter.println(KeyEvents.PRESS_MOUSE.getEventID());
+        printWriter.println(KeyEvents.MOUSE_PRESS.getEventID());
         printWriter.println(convertMouseButton(e.getButton()));
         printWriter.flush();
     }
 
     private void onMouseReleased(MouseEvent e) {
-        printWriter.println(KeyEvents.RELEASE_MOUSE.getEventID());
+        printWriter.println(KeyEvents.MOUSE_RELEASED.getEventID());
         printWriter.println(convertMouseButton(e.getButton()));
         printWriter.flush();
     }
 
     private void onKeyPressed(KeyEvent e) {
         try {
-            int events = KeyEvents.RELEASE_KEY.getEventID();
+            int events = KeyEvents.KEY_RELEASED.getEventID();
             int key = java.awt.event.KeyEvent.getExtendedKeyCodeForChar(e.getCharacter().charAt(0));
 
             printWriter.println(events);

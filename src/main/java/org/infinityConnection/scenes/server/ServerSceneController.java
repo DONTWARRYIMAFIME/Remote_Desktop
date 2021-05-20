@@ -53,7 +53,7 @@ public class ServerSceneController {
     }
 
     private void closeWindowEvent(WindowEvent event) {
-        server.shutDown();
+        server.shutdown();
     }
 
     private void turnOnServer() {
@@ -73,14 +73,14 @@ public class ServerSceneController {
         if (toggleButton.isSelected()) {
             turnOnServer();
         } else {
-            server.shutDown();
+            server.shutdown();
         }
     }
 
     public void onRegenerate() {
         toggleButton.setSelected(false);
 
-        server.shutDown();
+        server.shutdown();
         server.regeneratePassword();
         tfPassword.setText(server.getServerPassword());
     }

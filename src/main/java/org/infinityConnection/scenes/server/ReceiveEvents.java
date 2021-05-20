@@ -3,7 +3,6 @@ package org.infinityConnection.scenes.server;
 import org.infinityConnection.utils.KeyEvents;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -29,10 +28,10 @@ public class ReceiveEvents {
                 System.out.println(command.toString());
 
                 switch (command) {
-                    case PRESS_MOUSE -> robot.mousePress(scanner.nextInt());
-                    case RELEASE_MOUSE -> robot.mouseRelease(scanner.nextInt());
-                    case RELEASE_KEY -> robot.keyPress(scanner.nextInt());
-                    case MOVE_MOUSE -> robot.mouseMove(scanner.nextInt(), scanner.nextInt());
+                    case MOUSE_PRESS -> robot.mousePress(scanner.nextInt());
+                    case MOUSE_RELEASED -> robot.mouseRelease(scanner.nextInt());
+                    case KEY_RELEASED -> robot.keyPress(scanner.nextInt());
+                    case MOUSE_MOVE -> robot.mouseMove(scanner.nextInt(), scanner.nextInt());
                     default -> System.out.println("ReceiveEvents. Unknown event");
                 }
 
@@ -40,10 +39,10 @@ public class ReceiveEvents {
         } catch (IllegalArgumentException e) {
             System.out.println("Could not recognize pressed key");
         } catch (NoSuchElementException e) {
-            shutDown();
+            shutdown();
         } catch (Exception e) {
             e.printStackTrace();
-            shutDown();
+            shutdown();
         }
 
     }
@@ -64,7 +63,7 @@ public class ReceiveEvents {
         return stopWasRequested;
     }
 
-    public void shutDown() {
+    public void shutdown() {
         stopWasRequested = true;
 
         try {
